@@ -1,0 +1,71 @@
+@use '@angular/material' as mat;
+
+// PALETA PERSONALIZADA PAGEMARK COMPLETA
+
+$pagemark-primary: mat.define-palette((
+  50: #f3e5dc,
+  100: #e6d1c4,
+  200: #d9bdac,
+  300: #cca993,
+  400: #bf957b,
+  500: #AD8B73,
+  600: #9c7d67,
+  700: #8a6f5b,
+  800: #79614f,
+  900: #675343,
+  contrast: (500: white)
+), 500);
+
+$pagemark-accent: mat.define-palette((
+  50: #f8e9df,
+  100: #f1d9cb,
+  200: #eac9b7,
+  300: #e3b9a3,
+  400: #dcaa8f,
+  500: #CEAB93,
+  600: #b99984,
+  700: #a48875,
+  800: #8f7666,
+  900: #7a6457,
+  contrast: (500: black)
+), 500);
+
+$pagemark-warn: mat.define-palette((
+  50: #f7dada,
+  100: #efbfbf,
+  200: #e7a4a4,
+  300: #df8989,
+  400: #d76e6e,
+  500: #A64D4D,
+  600: #944545,
+  700: #823d3d,
+  800: #703535,
+  900: #5e2d2d,
+  contrast: (500: white)
+), 500);
+
+// DEFINICIÓN DEL TEMA COMPLETO
+$pagemark-theme: mat.define-light-theme((
+  color: (
+    primary: $pagemark-primary,
+    accent: $pagemark-accent,
+    warn: $pagemark-warn,
+  ),
+  typography: mat.define-typography-config(),
+  density: 0
+));
+
+// APLICACIÓN DEL TEMA
+@include mat.core();
+@include mat.all-component-themes($pagemark-theme);
+
+// ESTILOS GLOBALES
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  color: #444444;
+  background-color: #FFFBE9;
+  color-scheme: light;
+}
+
