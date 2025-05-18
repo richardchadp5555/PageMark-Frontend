@@ -7,13 +7,15 @@ import { HeaderComponent } from './header/header.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { FooterComponent } from './footer/footer.component';
 import { Error404PageComponent } from './error404-page/error404-page.component';
+import { LayoutComponent } from './layout/layout.component';
 
 @NgModule({
   declarations: [
     HeaderComponent,
     NavbarComponent,
     FooterComponent,
-    Error404PageComponent
+    Error404PageComponent,
+    LayoutComponent
   ],
   imports: [
     CommonModule,
