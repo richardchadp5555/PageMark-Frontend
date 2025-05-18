@@ -1,1 +1,19 @@
-<p>inicio works!</p>
+<!-- Bloque central con video de fondo y portada -->
+<div class="relative overflow-hidden border-round shadow-2 mb-6" style="height: auto;">
+  <!-- Fondo de vídeo -->
+  <video autoplay loop muted playsinline class="background-video">
+    <source src="https://videos.pexels.com/video-files/1722882/1722882-uhd_2560_1440_25fps.mp4" type="video/mp4" />
+  </video>
+
+  <!-- Overlay oscuro para atenuar -->
+  <div class="background-overlay"></div>
+
+  <!-- Contenido en primer plano -->
+  <div class="content-on-video text-center p-6">
+    <h1 class="text-3xl font-bold mb-2 text-white"><i class="fa fa-italic" aria-hidden="true">“El libro es fuerza, es valor, es alimento; antorcha del pensamiento y manantial del amor».</i></h1>
+    <p class="text-lg mb-4 text-white">
+      Rubén Darío
+    </p>
+    <img src="assets/pagemark-portada.png" alt="Lectura" class="w-10 max-w-30rem border-round shadow-4 mb-3" />
+  </div>
+</div>

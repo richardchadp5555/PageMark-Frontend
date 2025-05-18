@@ -17,7 +17,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
 
 @NgModule({
-  imports: [ // 👈 añade esto
+  imports: [
     MatAutocompleteModule,
     MatButtonModule,
     MatCardModule,

@@ -1,1 +1,33 @@
-<p>navbar works!</p>
+<header class="custom-navbar">
+  <div class="custom-navbar__logo">
+    <mat-icon>menu_book</mat-icon>
+  </div>
+  <nav class="custom-navbar__nav">
+    <ul class="custom-navbar__menu">
+      <li class="custom-navbar__item">
+        <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="custom-navbar__link">
+          <mat-icon>home</mat-icon>
+          <span>Inicio</span>
+        </a>
+      </li>
+      <li class="custom-navbar__item">
+        <a routerLink="/buscar" routerLinkActive="active" class="custom-navbar__link">
+          <mat-icon>search</mat-icon>
+          <span>Buscar</span>
+        </a>
+      </li>
+      <li class="custom-navbar__item">
+        <a routerLink="/mis-libros" routerLinkActive="active" class="custom-navbar__link">
+          <mat-icon>library_books</mat-icon>
+          <span>Mis libros</span>
+        </a>
+      </li>
+      <li class="custom-navbar__item">
+        <a routerLink="/noticias" routerLinkActive="active" class="custom-navbar__link">
+          <mat-icon>rss_feed</mat-icon>
+          <span>Noticias</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+</header>

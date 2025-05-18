@@ -1,0 +1,54 @@
+.pagemark-footer {
+  background-color: #AD8B73;
+  color: white;
+  padding: 2rem 2rem 1rem;
+  font-size: 0.875rem;
+
+  .footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 1rem;
+  }
+
+  .footer-left {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+
+    .footer-logo {
+      height: 32px;
+      width: 32px;
+    }
+
+    .footer-brand {
+      font-weight: bold;
+      font-size: 1rem;
+    }
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+
+    a {
+      color: white;
+      text-decoration: none;
+      transition: color 0.2s ease;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
+  .footer-bottom {
+    margin-top: 1rem;
+    text-align: center;
+    font-size: 0.8rem;
+    opacity: 0.85;
+  }
+}
