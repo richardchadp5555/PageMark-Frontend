@@ -1,0 +1,38 @@
+.card-noticia {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+
+  mat-card-header {
+    margin-bottom: 0.5rem;
+
+    mat-card-title {
+      font-weight: bold;
+      font-size: 1.1rem;
+    }
+
+    mat-card-subtitle {
+      font-size: 0.85rem;
+      color: #777;
+    }
+  }
+
+  mat-card-content {
+    font-size: 0.95rem;
+    flex-grow: 1;
+  }
+
+  mat-card-actions {
+    margin-top: auto;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  img {
+    max-height: 180px;
+    object-fit: cover;
+    border-radius: 4px;
+  }
+}
