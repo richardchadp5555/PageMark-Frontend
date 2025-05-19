@@ -1,0 +1,14 @@
+<div class="avatar-header">
+  <span class="username">{{ username }}</span>
+
+  <button mat-icon-button [matMenuTriggerFor]="menu">
+    <mat-icon class="avatar-icon">account_circle</mat-icon>
+  </button>
+
+  <mat-menu #menu="matMenu" class="logout-menu">
+    <button mat-menu-item (click)="logout()" class="logout-item">
+      <mat-icon>logout</mat-icon>
+      <span>Cerrar sesión</span>
+    </button>
+  </mat-menu>
+</div>

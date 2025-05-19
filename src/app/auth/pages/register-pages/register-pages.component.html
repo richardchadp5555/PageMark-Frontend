@@ -1,1 +1,38 @@
-<p>register-pages works!</p>
+<!-- Proyecto: PageMark -->
+<!-- Archivo: register-pages.component.html -->
+<!-- Descripción: Formulario de registro -->
+<!-- Autor: Richard Chadwick Plaza - 2º DAM -->
+
+<div class="h-screen flex justify-content-center align-items-center">
+    <mat-card class="p-4 shadow-4 border-round-xl w-full sm:w-30rem">
+      <h2 class="text-center mb-3">Crear cuenta</h2>
+  
+      <form [formGroup]="form" (ngSubmit)="registrar()" class="flex flex-column gap-3">
+        <mat-form-field appearance="fill">
+          <mat-label>Nombre de usuario</mat-label>
+          <input matInput formControlName="username" />
+        </mat-form-field>
+  
+        <mat-form-field appearance="fill">
+          <mat-label>Correo electrónico</mat-label>
+          <input matInput formControlName="email" type="email" />
+        </mat-form-field>
+  
+        <mat-form-field appearance="fill">
+          <mat-label>Contraseña</mat-label>
+          <input matInput formControlName="password" type="password" />
+        </mat-form-field>
+  
+        <button mat-flat-button color="primary" type="submit" [disabled]="loading">
+          Registrarse
+        </button>
+      </form>
+  
+      <div class="text-center mt-4">
+        <span>¿Ya tienes cuenta? 
+          <a routerLink="/auth/login" class="link-registrarse">Inicia sesión</a>
+        </span>
+      </div>
+    </mat-card>
+  </div>
+  

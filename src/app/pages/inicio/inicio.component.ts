@@ -1,19 +1,32 @@
-import { Component } from '@angular/core';
+// Proyecto: PageMark
+// Archivo: inicio.component.ts
+// Descripción: Página de inicio con saludo personalizado.
+// Autor: Richard Chadwick Plaza - 2º DAM
+
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-inicio',
   templateUrl: './inicio.component.html',
   styleUrls: ['./inicio.component.scss']
 })
-export class InicioComponent {
-  librosPopulares = [
-    { titulo: 'Libro 1', autores: ['Autor 1'], imagen: 'https://via.placeholder.com/150x200' },
-    { titulo: 'Libro 2', autores: ['Autor 2'], imagen: 'https://via.placeholder.com/150x200' },
-    { titulo: 'Libro 3', autores: ['Autor 3'], imagen: 'https://via.placeholder.com/150x200' },
-  ];
+export class InicioComponent implements OnInit {
+  username: string = '';
+  saludo: string = '';
 
-  resenasRecientes = [
-    { username: 'richard', fecha: new Date(), comentario: 'Muy buen libro, lo recomiendo.' },
-    { username: 'belinda', fecha: new Date(), comentario: 'Una historia intensa y conmovedora.' },
-  ];
+  ngOnInit(): void {
+    const usuario = localStorage.getItem('usuario');
+    if (usuario) {
+      this.username = JSON.parse(usuario).username;
+    }
+
+    const hora = new Date().getHours();
+    if (hora >= 6 && hora < 12) {
+      this.saludo = 'Buenos días';
+    } else if (hora >= 12 && hora < 20) {
+      this.saludo = 'Buenas tardes';
+    } else {
+      this.saludo = 'Buenas noches';
+    }
+  }
 }

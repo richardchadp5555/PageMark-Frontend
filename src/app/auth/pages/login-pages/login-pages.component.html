@@ -1,1 +1,63 @@
-<p>login-pages works!</p>
+<!-- Proyecto: PageMark -->
+<!-- Archivo: login-pages.component.html -->
+<!-- Descripción: Formulario de login dividido en dos pasos: username y contraseña -->
+<!-- Autor: Richard Chadwick Plaza -->
+<!-- Fecha: 19/05/2025 - Curso: 2º DAM -->
+
+<div class="h-screen flex justify-content-center align-items-center">
+  <mat-card class="p-4 shadow-4 border-round-xl w-full sm:w-30rem">
+    <h2 class="text-center mb-3">Iniciar Sesión</h2>
+
+    <!-- Paso 1: Usuario -->
+    <form *ngIf="paso === 1" [formGroup]="formUsername" (ngSubmit)="siguientePaso()" class="flex flex-column gap-3">
+      <mat-form-field appearance="fill">
+        <mat-label>Nombre de usuario</mat-label>
+        <input matInput formControlName="username" type="text" />
+        <mat-error *ngIf="formUsername.get('username')?.touched && formUsername.get('username')?.invalid">
+          Campo obligatorio
+        </mat-error>
+      </mat-form-field>
+
+      <div class="text-center mt-4">
+        <span>¿Aún no tienes cuenta? 
+          <a routerLink="/auth/register" class="link-registrarse">¡Regístrate!</a>
+        </span>
+      </div>
+
+      <button mat-flat-button color="primary" [disabled]="loading">Siguiente</button>
+    </form>
+
+    <!-- Paso 2: Contraseña -->
+    <form *ngIf="paso === 2" [formGroup]="formPassword" (ngSubmit)="login()" class="flex flex-column gap-3">
+      <mat-form-field appearance="fill">
+        <mat-label>Contraseña</mat-label>
+        <input
+          matInput
+          [type]="mostrarPassword ? 'text' : 'password'"
+          formControlName="password"
+        />
+        <button
+          mat-icon-button
+          matSuffix
+          (click)="mostrarPassword = !mostrarPassword"
+          [attr.aria-label]="'Mostrar/ocultar contraseña'"
+          [attr.aria-pressed]="mostrarPassword"
+          type="button"
+        >
+          <mat-icon>{{ mostrarPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+      </mat-form-field>
+
+      <div class="text-center mt-4">
+        <span>¿Aún no tienes cuenta? 
+          <a routerLink="/auth/register" class="link-registrarse">¡Regístrate!</a>
+        </span>
+      </div>
+      
+      <div class="flex justify-content-between">
+        <button mat-stroked-button color="accent" type="button" (click)="paso = 1">Volver</button>
+        <button mat-flat-button color="primary">Entrar</button>
+      </div>
+    </form>
+  </mat-card>
+</div>

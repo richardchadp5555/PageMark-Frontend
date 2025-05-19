@@ -1,5 +1,11 @@
+// Proyecto: PageMark
+// Archivo: login-pages.component.ts
+// Descripción: Lógica para el formulario de login paso a paso.
+// Autor: Richard Chadwick Plaza
+// Fecha: 19/05/2025 - Curso: 2º DAM
+
 import { Component } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 
@@ -9,43 +15,48 @@ import { Router } from '@angular/router';
   styleUrls: ['./login-pages.component.scss']
 })
 export class LoginPagesComponent {
-  paso = 1;
-  loading = false;
-
-  formEmail = this.fb.group({
-    username: ['', Validators.required] // usamos username en lugar de email
-  });
-
-  formPassword = this.fb.group({
-    password: ['', Validators.required]
-  });
+  paso: number = 1;
+  formUsername!: FormGroup;
+  formPassword!: FormGroup;
+  mostrarPassword: boolean = false;
+  loading: boolean = false;
 
   constructor(
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router
-  ) {}
+  ) {
+    this.formUsername = this.fb.group({
+      username: ['', Validators.required]
+    });
 
-  siguientePaso() {
-    if (this.formEmail.valid) {
-      this.loading = true;
-      setTimeout(() => {
-        this.loading = false;
-        this.paso = 2;
-      }, 1000);
-    }
+    this.formPassword = this.fb.group({
+      password: ['', Validators.required]
+    });
   }
 
-  login() {
-    const username = this.formEmail.value.username!;
-    const password = this.formPassword.value.password!;
+  siguientePaso(): void {
+    if (this.formUsername.invalid) return;
+    this.paso = 2;
+  }
+
+  login(): void {
+    if (this.formPassword.invalid) return;
+
+    const username = this.formUsername.value.username;
+    const password = this.formPassword.value.password;
+
+    this.loading = true;
 
     this.authService.login(username, password).subscribe({
-      next: () => {
-        this.router.navigate(['/']); // redirigir a inicio
+      next: (res: any) => {
+        localStorage.setItem('usuario', JSON.stringify({ username }));
+        this.router.navigate(['/inicio']);
       },
-      error: () => {
-        alert('Credenciales incorrectas');
+      error: (err) => {
+        this.loading = false;
+        alert('Usuario o contraseña incorrectos');
+        this.paso = 1;
       }
     });
   }

@@ -1,0 +1,10 @@
+.link-registrarse {
+  color: #42a5f5;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

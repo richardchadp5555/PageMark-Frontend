@@ -12,11 +12,26 @@ import { ResenasComponent } from './pages/resenas/resenas.component';
 import { NoticiasComponent } from './pages/noticias/noticias.component';
 
 const routes: Routes = [
+  // 👉 Ruta raíz redirige al login
+  {
+    path: '',
+    redirectTo: 'auth/login',
+    pathMatch: 'full'
+  },
+
+  // 👉 Rutas del módulo de autenticación
+  {
+    path: 'auth',
+    loadChildren: () =>
+      import('./auth/auth.module').then(m => m.AuthModule)
+  },
+
+  // 👉 Rutas protegidas con Layout
   {
     path: '',
     component: LayoutComponent,
     children: [
-      { path: '', component: InicioComponent },
+      { path: 'inicio', component: InicioComponent },
       { path: 'buscar', component: BuscarComponent },
       { path: 'mis-libros', component: MisLibrosComponent },
       { path: 'detalles-libro', component: DetallesLibroComponent },
@@ -24,7 +39,12 @@ const routes: Routes = [
       { path: 'noticias', component: NoticiasComponent }
     ]
   },
-  { path: '**', component: Error404PageComponent }
+
+  // 👉 Página 404
+  {
+    path: '**',
+    component: Error404PageComponent
+  }
 ];
 
 @NgModule({
