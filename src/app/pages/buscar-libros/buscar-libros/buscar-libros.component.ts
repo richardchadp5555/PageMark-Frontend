@@ -1,10 +1,10 @@
 // Proyecto: PageMark
 // Archivo: buscar-libros.component.ts
-// Descripción: Página para buscar libros a través de Google Books.
+// Descripción: Página que permite buscar libros mediante Google Books.
 // Autor: Richard Chadwick Plaza - 2º DAM
 
 import { Component } from '@angular/core';
-import { LibrosService } from '../../services/libros.service';
+import { LibrosService } from '../../../services/libros.service';
 
 @Component({
   selector: 'app-buscar-libros',
@@ -19,7 +19,7 @@ export class BuscarLibrosComponent {
   onSearch(query: string): void {
     this.librosService.buscarLibros(query).subscribe({
       next: (res: any) => {
-        const data = JSON.parse(res); // respuesta stringificada del backend
+        const data = JSON.parse(res); // backend devuelve string
         this.libros = data.items || [];
       },
       error: () => {

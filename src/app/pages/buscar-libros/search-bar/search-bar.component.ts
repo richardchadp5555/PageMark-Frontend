@@ -1,6 +1,6 @@
 // Proyecto: PageMark
 // Archivo: search-bar.component.ts
-// Descripción: Barra de búsqueda que emite texto al componente padre.
+// Descripción: Barra de búsqueda para emitir términos al componente padre.
 // Autor: Richard Chadwick Plaza - 2º DAM
 
 import { Component, EventEmitter, Output } from '@angular/core';

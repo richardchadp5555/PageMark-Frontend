@@ -17,8 +17,22 @@ export class LibrosService {
   constructor(private http: HttpClient) {}
 
   buscarLibros(query: string): Observable<any> {
+    const usuario = localStorage.getItem('usuario');
+  
+    if (!usuario) {
+      throw new Error('No hay usuario autenticado');
+    }
+  
+    const { username, password } = JSON.parse(usuario);
+    const basicToken = btoa(`${username}:${password}`);
+    const headers = {
+      Authorization: `Basic ${basicToken}`
+    };
+  
     return this.http.get(`${this.apiUrl}/buscar?q=${encodeURIComponent(query)}`, {
+      headers,
       responseType: 'text'
     });
   }
+  
 }
