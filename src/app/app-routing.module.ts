@@ -5,7 +5,7 @@ import { LayoutComponent } from './shared/layout/layout.component';
 import { Error404PageComponent } from './shared/error404-page/error404-page.component';
 
 import { InicioComponent } from './pages/inicio/inicio.component';
-import { BuscarComponent } from './pages/buscar/buscar.component';
+import { BuscarLibrosComponent } from './pages/buscar-libros/buscar-libros/buscar-libros.component';
 import { MisLibrosComponent } from './pages/mis-libros/mis-libros.component';
 import { DetallesLibroComponent } from './pages/detalles-libro/detalles-libro.component';
 import { ResenasComponent } from './pages/resenas/resenas.component';
@@ -32,7 +32,7 @@ const routes: Routes = [
     component: LayoutComponent,
     children: [
       { path: 'inicio', component: InicioComponent },
-      { path: 'buscar', component: BuscarComponent },
+      { path: 'buscar', component: BuscarLibrosComponent },
       { path: 'mis-libros', component: MisLibrosComponent },
       { path: 'detalles-libro', component: DetallesLibroComponent },
       { path: 'resenas', component: ResenasComponent },

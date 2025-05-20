@@ -1,0 +1,15 @@
+<!-- Proyecto: PageMark -->
+<!-- Archivo: search-bar.component.html -->
+<!-- Descripción: Input de búsqueda que emite texto -->
+<!-- Autor: Richard Chadwick Plaza - 2º DAM -->
+
+<mat-form-field appearance="fill" class="w-full">
+    <mat-label>Buscar libro</mat-label>
+    <input
+      matInput
+      [formControl]="searchInput"
+      (input)="onInput()"
+      placeholder="Introduce título, autor o palabra clave"
+    />
+  </mat-form-field>
+  

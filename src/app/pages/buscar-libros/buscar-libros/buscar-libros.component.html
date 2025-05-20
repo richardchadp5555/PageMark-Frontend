@@ -1,0 +1,26 @@
+<!-- Proyecto: PageMark -->
+<!-- Archivo: buscar-libros.component.html -->
+<!-- Descripción: Muestra barra de búsqueda y resultados -->
+<!-- Autor: Richard Chadwick Plaza - 2º DAM -->
+
+<div class="p-4">
+    <app-search-bar (search)="onSearch($event)"></app-search-bar>
+  
+    <div class="grid mt-4" *ngIf="libros.length > 0">
+      <div
+        class="col-12 sm:col-6 md:col-4 lg:col-3 xl:col-2"
+        *ngFor="let libro of libros"
+      >
+        <mat-card class="p-2 h-full shadow-4">
+          <img
+            [src]="libro.volumeInfo.imageLinks?.thumbnail"
+            alt="Portada"
+            class="w-full border-round mb-2"
+          />
+          <h4>{{ libro.volumeInfo.title }}</h4>
+          <p class="text-sm text-muted">{{ libro.volumeInfo.authors?.join(', ') }}</p>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+  

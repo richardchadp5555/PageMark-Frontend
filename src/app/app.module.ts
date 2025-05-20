@@ -16,6 +16,7 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { SharedModule } from './shared/shared.module';
 import { MaterialModule } from './material/material.module';
+import { SearchBarComponent } from './pages/buscar-libros/search-bar/search-bar.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { MaterialModule } from './material/material.module';
     MisLibrosComponent,
     DetallesLibroComponent,
     ResenasComponent,
-    NoticiasComponent
+    NoticiasComponent,
+    SearchBarComponent
   ],
   imports: [
     BrowserModule,
