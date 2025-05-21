@@ -33,6 +33,6 @@ export class LibrosService {
       headers,
       responseType: 'text'
     });
-  }
+  }  
   
 }

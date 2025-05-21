@@ -42,22 +42,26 @@ export class LoginPagesComponent {
 
   login(): void {
     if (this.formPassword.invalid) return;
-
+  
     const username = this.formUsername.value.username;
     const password = this.formPassword.value.password;
-
+  
     this.loading = true;
-
+  
     this.authService.login(username, password).subscribe({
-      next: (res: any) => {
-        localStorage.setItem('usuario', JSON.stringify({ username }));
+      next: () => {
+        // ⚠️ Guardamos las credenciales introducidas, NO la respuesta del backend
+        localStorage.setItem('usuario', JSON.stringify({ username, password }));
         this.router.navigate(['/inicio']);
       },
-      error: (err) => {
+    
+      error: () => {
         this.loading = false;
         alert('Usuario o contraseña incorrectos');
         this.paso = 1;
       }
     });
   }
+  
+  
 }
