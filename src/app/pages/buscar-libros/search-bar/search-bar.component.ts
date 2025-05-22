@@ -1,6 +1,6 @@
 // Proyecto: PageMark
 // Archivo: search-bar.component.ts
-// Descripción: Barra de búsqueda para emitir términos al componente padre.
+// Descripción: Barra de búsqueda que emite solo si el usuario pulsa Enter.
 // Autor: Richard Chadwick Plaza - 2º DAM
 
 import { Component, EventEmitter, Output } from '@angular/core';
@@ -16,8 +16,10 @@ export class SearchBarComponent {
 
   @Output() search = new EventEmitter<string>();
 
-  onInput(): void {
+  onSearch(): void {
     const value = this.searchInput.value?.trim();
-    if (value) this.search.emit(value);
+    if (value && value.length >= 3) {
+      this.search.emit(value);
+    }
   }
 }

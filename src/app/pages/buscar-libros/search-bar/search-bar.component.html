@@ -1,9 +1,16 @@
+<!-- Proyecto: PageMark -->
+<!-- Archivo: search-bar.component.html -->
+<!-- Descripción: Campo de búsqueda que emite el término solo al pulsar Enter -->
+<!-- Autor: Richard Chadwick Plaza - 2º DAM -->
+<!-- Fecha: 21/05/2025 -->
+
 <mat-form-field appearance="fill" class="w-full">
   <mat-label>Buscar libro</mat-label>
   <input
+    type="text"
     matInput
     [formControl]="searchInput"
-    (input)="onInput()"
-    placeholder="Introduce título, autor o palabra clave"
+    (keyup.enter)="onSearch()"
+    placeholder="Introduce el título del libro"
   />
 </mat-form-field>
