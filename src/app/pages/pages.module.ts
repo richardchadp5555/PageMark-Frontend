@@ -7,11 +7,14 @@ import { MaterialModule } from '../material/material.module';
 
 import { BuscarLibrosComponent } from './buscar-libros/buscar-libros/buscar-libros.component';
 import { SearchBarComponent } from './buscar-libros/search-bar/search-bar.component';
+import { NoticiasComponent } from './noticias/noticias.component';
+
 
 @NgModule({
   declarations: [
     BuscarLibrosComponent,
-    SearchBarComponent
+    SearchBarComponent,
+    NoticiasComponent
   ],
   imports: [
     CommonModule,

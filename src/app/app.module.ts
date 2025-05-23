@@ -25,7 +25,6 @@ import { PagesModule } from './pages/pages.module';
     MisLibrosComponent,
     DetallesLibroComponent,
     ResenasComponent,
-    NoticiasComponent
     // ❌ No declares SearchBarComponent ni BuscarLibrosComponent aquí si están en PagesModule
   ],
   imports: [
