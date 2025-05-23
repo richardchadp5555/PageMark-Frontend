@@ -6,6 +6,8 @@ import { AuthRoutingModule } from './auth-routing.module';
 import { LoginPagesComponent } from './pages/login-pages/login-pages.component';
 import { RegisterPagesComponent } from './pages/register-pages/register-pages.component';
 import { MaterialModule } from 'src/app/material/material.module';
+import { environment } from 'src/environments/environment';
+
 
 @NgModule({
   declarations: [
@@ -16,7 +18,7 @@ import { MaterialModule } from 'src/app/material/material.module';
     CommonModule,
     ReactiveFormsModule,
     MaterialModule,
-    AuthRoutingModule
+    AuthRoutingModule,
   ]
 })
 export class AuthModule { }

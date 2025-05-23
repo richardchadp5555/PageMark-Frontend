@@ -11,7 +11,7 @@ import { Noticia } from 'src/app/interfaces/noticia.interface';
 @Component({
   selector: 'app-noticias',
   templateUrl: './noticias.component.html',
-  styleUrls: ['./noticias.component.css']
+  styleUrls: ['./noticias.component.scss']
 })
 export class NoticiasComponent implements OnInit {
 

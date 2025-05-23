@@ -10,8 +10,6 @@ import { InicioComponent } from './pages/inicio/inicio.component';
 import { MisLibrosComponent } from './pages/mis-libros/mis-libros.component';
 import { DetallesLibroComponent } from './pages/detalles-libro/detalles-libro.component';
 import { ResenasComponent } from './pages/resenas/resenas.component';
-import { NoticiasComponent } from './pages/noticias/noticias.component';
-
 import { HttpClientModule } from '@angular/common/http';
 
 import { SharedModule } from './shared/shared.module';
