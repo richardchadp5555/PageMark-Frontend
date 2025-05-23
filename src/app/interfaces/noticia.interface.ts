@@ -1,8 +1,7 @@
 export interface Noticia {
   titulo: string;
   descripcion: string;
-  enlace: string;
+  url: string;
   fecha: string;
-  fuente: string;
-  imagen?: string;
+  imagen: string;
 }

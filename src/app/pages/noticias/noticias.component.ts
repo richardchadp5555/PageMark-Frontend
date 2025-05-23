@@ -1,12 +1,7 @@
-// Proyecto: PageMark
-// Archivo: noticias.component.ts
-// Descripción: Componente para mostrar noticias literarias desde el backend.
-// Autor: Richard Chadwick Plaza
-// Fecha: 22/05/2025 - Curso: 2º DAM
 
 import { Component, OnInit } from '@angular/core';
-import { NoticiasService } from 'src/app/services/noticias.service';
-import { Noticia } from 'src/app/interfaces/noticia.interface';
+import { Noticia } from '../../interfaces/noticia.interface';
+import { NoticiaService } from '../../services/noticias.service';
 
 @Component({
   selector: 'app-noticias',
@@ -14,22 +9,21 @@ import { Noticia } from 'src/app/interfaces/noticia.interface';
   styleUrls: ['./noticias.component.scss']
 })
 export class NoticiasComponent implements OnInit {
-
   noticias: Noticia[] = [];
-  isLoading: boolean = true;
-  error: string | null = null;
+  isLoading = true;
+  error = false;
 
-  constructor(private noticiaService: NoticiasService) {}
+  constructor(private noticiaService: NoticiaService) {}
 
   ngOnInit(): void {
     this.noticiaService.obtenerNoticias().subscribe({
-      next: (data: Noticia[]) => {
-        this.noticias = data;
+      next: (res) => {
+        this.noticias = res;
         this.isLoading = false;
       },
-      error: (err: any) => {
-        console.error('Error al cargar noticias:', err);
-        this.error = 'No se pudieron cargar las noticias.';
+      error: (err) => {
+        console.error('Error al cargar noticias', err);
+        this.error = true;
         this.isLoading = false;
       }
     });

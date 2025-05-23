@@ -1,24 +1,16 @@
-<div *ngIf="isLoading">
-  <p>Cargando noticias...</p>
-</div>
-
-<div *ngIf="error">
-  <p style="color: red;">{{ error }}</p>
-</div>
-
-<div *ngIf="!isLoading && !error && noticias.length > 0" class="grid grid-nogutter">
+<div *ngIf="!isLoading && !error && noticias.length > 0" class="grid grid_nogutter">
   <div *ngFor="let noticia of noticias" class="col-12 md:col-6 lg:col-4 p-2">
     <mat-card class="card-noticia">
       <img mat-card-image *ngIf="noticia.imagen" [src]="noticia.imagen" alt="Imagen de la noticia" />
       <mat-card-header>
         <mat-card-title>{{ noticia.titulo }}</mat-card-title>
-        <mat-card-subtitle>{{ noticia.fecha }} – {{ noticia.fuente }}</mat-card-subtitle>
+        <mat-card-subtitle>{{ noticia.fecha }}</mat-card-subtitle>
       </mat-card-header>
       <mat-card-content>
         <p>{{ noticia.descripcion }}</p>
       </mat-card-content>
       <mat-card-actions>
-        <a mat-button color="primary" [href]="noticia.enlace" target="_blank">Leer más</a>
+        <a mat-button color="primary" [href]="noticia.url" target="_blank">Leer más</a>
       </mat-card-actions>
     </mat-card>
   </div>
@@ -26,4 +18,8 @@
 
 <div *ngIf="!isLoading && noticias.length === 0">
   <p>No hay noticias disponibles.</p>
+</div>
+
+<div *ngIf="error">
+  <p>Error al cargar las noticias. Inténtalo de nuevo más tarde.</p>
 </div>
