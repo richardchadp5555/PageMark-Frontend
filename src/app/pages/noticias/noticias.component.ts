@@ -1,7 +1,8 @@
+// components/noticias/noticias.component.ts
 
 import { Component, OnInit } from '@angular/core';
 import { Noticia } from '../../interfaces/noticia.interface';
-import { NoticiaService } from '../../services/noticias.service';
+import { NoticiasService } from '../../services/noticias.service';
 
 @Component({
   selector: 'app-noticias',
@@ -13,12 +14,12 @@ export class NoticiasComponent implements OnInit {
   isLoading = true;
   error = false;
 
-  constructor(private noticiaService: NoticiaService) {}
+  constructor(private noticiaService: NoticiasService) {}
 
   ngOnInit(): void {
     this.noticiaService.obtenerNoticias().subscribe({
       next: (res) => {
-        this.noticias = res;
+        this.noticias = res.slice(0, 40);
         this.isLoading = false;
       },
       error: (err) => {

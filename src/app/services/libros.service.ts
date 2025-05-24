@@ -1,6 +1,6 @@
 // Proyecto: PageMark
 // Archivo: libros.service.ts
-// Descripción: Servicio que conecta con el backend para buscar libros.
+// Descripción: Servicio que conecta con el backend para buscar libros y obtener libros populares.
 // Autor: Richard Chadwick Plaza - 2º DAM
 
 import { Injectable } from '@angular/core';
@@ -18,6 +18,25 @@ export class LibrosService {
 
   buscarLibros(query: string): Observable<any> {
     const usuario = localStorage.getItem('usuario');
+
+    if (!usuario) {
+      throw new Error('No hay usuario autenticado');
+    }
+
+    const { username, password } = JSON.parse(usuario);
+    const basicToken = btoa(`${username}:${password}`);
+    const headers = {
+      Authorization: `Basic ${basicToken}`
+    };
+
+    return this.http.get(`${this.apiUrl}/buscar?q=${encodeURIComponent(query)}`, {
+      headers,
+      responseType: 'text'
+    });
+  }
+
+  obtenerLibrosPopulares(): Observable<any> {
+    const usuario = localStorage.getItem('usuario');
   
     if (!usuario) {
       throw new Error('No hay usuario autenticado');
@@ -29,10 +48,9 @@ export class LibrosService {
       Authorization: `Basic ${basicToken}`
     };
   
-    return this.http.get(`${this.apiUrl}/buscar?q=${encodeURIComponent(query)}`, {
-      headers,
-      responseType: 'text'
+    return this.http.get(`${this.apiUrl}/populares`, {
+      headers
     });
-  }  
+  }
   
 }

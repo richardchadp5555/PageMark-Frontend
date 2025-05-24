@@ -4,8 +4,19 @@
 <!-- Autor: Richard Chadwick Plaza - 2º DAM -->
 
 <div class="p-4">
+
+  <!-- Sección de libros populares -->
+  <app-libros-populares></app-libros-populares>
+
+  <div class="text-center mb-4">
+    <h2 class="text-2xl font-bold mb-2">Búsqueda de libros</h2>
+    <p class="text-gray-600">Encuentra libros mediante Google Books API introduciendo el título, autor o palabra clave que desees.</p>
+  </div>
+  
+  <!-- Barra de búsqueda -->
   <app-search-bar (search)="onSearch($event)"></app-search-bar>
 
+  <!-- Resultados de búsqueda -->
   <div class="grid mt-4" *ngIf="libros.length > 0">
     <div class="col-12 sm:col-6 md:col-4 lg:col-3 xl:col-2" *ngFor="let libro of libros">
       <mat-card class="p-2 h-full shadow-4">
@@ -13,6 +24,7 @@
           [src]="libro.volumeInfo.imageLinks?.thumbnail"
           alt="Portada"
           class="w-full border-round mb-2"
+          style="height: 300px; object-fit: cover;"
         />
         <h4>{{ libro.volumeInfo.title }}</h4>
         <p class="text-sm text-muted">{{ libro.volumeInfo.authors?.join(', ') }}</p>
