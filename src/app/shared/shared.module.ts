@@ -1,8 +1,14 @@
+// Proyecto: PageMark
+// Archivo: shared.module.ts
+// Descripción: Módulo compartido con layout, header, footer, navbar, avatar, error404
+// Autor: Richard Chadwick Plaza - 2º DAM
+
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { MaterialModule } from '../material/material.module';
 
+// Componentes compartidos
 import { HeaderComponent } from './header/header.component';
 import { NavbarComponent } from './navbar/navbar.component';
 import { FooterComponent } from './footer/footer.component';
@@ -29,7 +35,8 @@ import { AvatarComponent } from './avatar/avatar.component';
     NavbarComponent,
     FooterComponent,
     Error404PageComponent,
-    AvatarComponent
+    AvatarComponent,
+    LayoutComponent
   ]
 })
 export class SharedModule { }

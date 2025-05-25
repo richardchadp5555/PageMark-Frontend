@@ -1,1 +1,77 @@
-<p>mis-libros works!</p>
+<!-- Proyecto: PageMark -->
+<!-- Archivo: mis-libros.component.html -->
+<!-- Descripción: Vista con libros guardados del usuario, separados por estado -->
+<!-- Autor: Richard Chadwick Plaza - 2º DAM -->
+
+<div class="p-4">
+  <h2 class="text-2xl font-bold text-center mb-5">Mis Libros</h2>
+
+  <!-- QUIERO LEER -->
+  <h3 class="text-xl mb-3 flex align-items-center">
+    <mat-icon class="mr-2 text-green-600">auto_stories</mat-icon> Quiero leer
+  </h3>
+  <div *ngIf="quieroLeer.length === 0" class="mb-4">No hay libros en esta lista.</div>
+  <div class="grid mb-6" *ngIf="quieroLeer.length > 0">
+    <div class="col-12 sm:col-6 md:col-4 lg:col-3 xl:col-2" *ngFor="let libro of quieroLeer">
+      <mat-card
+        class="p-2 h-full shadow-4 cursor-pointer"
+        [routerLink]="['/detalles-libro', libro.googleBookId]"
+      >
+        <img
+          [src]="libro.imagen"
+          alt="Portada"
+          class="w-full border-round mb-2"
+          style="height: 300px; object-fit: cover;"
+        />
+        <h4>{{ libro.titulo }}</h4>
+        <p class="text-sm text-muted">{{ libro.autor }}</p>
+      </mat-card>
+    </div>
+  </div>
+
+  <!-- LEYENDO -->
+  <h3 class="text-xl mb-3 flex align-items-center">
+    <mat-icon class="mr-2 text-blue-600">menu_book</mat-icon> Leyendo
+  </h3>
+  <div *ngIf="leyendo.length === 0" class="mb-4">No hay libros en esta lista.</div>
+  <div class="grid mb-6" *ngIf="leyendo.length > 0">
+    <div class="col-12 sm:col-6 md:col-4 lg:col-3 xl:col-2" *ngFor="let libro of leyendo">
+      <mat-card
+        class="p-2 h-full shadow-4 cursor-pointer"
+        [routerLink]="['/detalles-libro', libro.googleBookId]"
+      >
+        <img
+          [src]="libro.imagen"
+          alt="Portada"
+          class="w-full border-round mb-2"
+          style="height: 300px; object-fit: cover;"
+        />
+        <h4>{{ libro.titulo }}</h4>
+        <p class="text-sm text-muted">{{ libro.autor }}</p>
+      </mat-card>
+    </div>
+  </div>
+
+  <!-- LEÍDO -->
+  <h3 class="text-xl mb-3 flex align-items-center">
+    <mat-icon class="mr-2 text-red-600">check_box</mat-icon> Leído
+  </h3>
+  <div *ngIf="leido.length === 0" class="mb-4">No hay libros en esta lista.</div>
+  <div class="grid mb-6" *ngIf="leido.length > 0">
+    <div class="col-12 sm:col-6 md:col-4 lg:col-3 xl:col-2" *ngFor="let libro of leido">
+      <mat-card
+        class="p-2 h-full shadow-4 cursor-pointer"
+        [routerLink]="['/detalles-libro', libro.googleBookId]"
+      >
+        <img
+          [src]="libro.imagen"
+          alt="Portada"
+          class="w-full border-round mb-2"
+          style="height: 300px; object-fit: cover;"
+        />
+        <h4>{{ libro.titulo }}</h4>
+        <p class="text-sm text-muted">{{ libro.autor }}</p>
+      </mat-card>
+    </div>
+  </div>
+</div>

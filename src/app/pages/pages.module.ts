@@ -1,29 +1,45 @@
+// Proyecto: PageMark
+// Archivo: pages.module.ts
+// Descripción: Módulo de páginas principales (inicio, buscar, mis libros, detalles, reseñas, noticias)
+// Autor: Richard Chadwick Plaza - 2º DAM
+
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-
 import { MaterialModule } from '../material/material.module';
 
+// Componentes de páginas
+import { InicioComponent } from './inicio/inicio.component';
+import { MisLibrosComponent } from './mis-libros/mis-libros.component';
+import { DetallesLibroComponent } from './detalles-libro/detalles-libro.component';
+import { ResenasComponent } from './resenas/resenas.component';
+import { NoticiasComponent } from './noticias/noticias.component';
+
+// Componentes de buscar-libros
 import { BuscarLibrosComponent } from './buscar-libros/buscar-libros/buscar-libros.component';
 import { SearchBarComponent } from './buscar-libros/search-bar/search-bar.component';
-import { NoticiasComponent } from './noticias/noticias.component';
 import { LibrosPopularesComponent } from './buscar-libros/libros-populares/libros-populares.component';
-
+import { FeedActividadComponent } from './inicio/feed-actividad/feed-actividad.component';
 
 @NgModule({
   declarations: [
+    InicioComponent,
+    MisLibrosComponent,
+    DetallesLibroComponent,
+    ResenasComponent,
+    NoticiasComponent,
     BuscarLibrosComponent,
     SearchBarComponent,
-    NoticiasComponent,
-    LibrosPopularesComponent
+    LibrosPopularesComponent,
+    FeedActividadComponent
   ],
   imports: [
     CommonModule,
+    FormsModule,
     ReactiveFormsModule,
     RouterModule,
     MaterialModule
-  ],
-  exports: []
+  ]
 })
 export class PagesModule { }

@@ -1,1 +1,106 @@
-<p>detalles-libro works!</p>
+<!-- Proyecto: PageMark -->
+<!-- Archivo: detalles-libro.component.html -->
+<!-- Descripción: Vista de detalles de un libro consultando directamente a Google Books API -->
+<!--              Permite al usuario guardar, eliminar, mover o actualizar libros en su lista -->
+<!-- Autor: Richard Chadwick Plaza - 2º DAM -->
+
+<div class="p-4" *ngIf="!isLoading && libro">
+  <div class="grid">
+    <div class="col-12 md:col-4">
+      <img
+        [src]="libro.volumeInfo?.imageLinks?.thumbnail"
+        alt="Portada del libro"
+        class="w-full border-round shadow-4"
+        style="max-height: 500px; object-fit: contain;"
+      />
+    </div>
+
+    <div class="col-12 md:col-8">
+      <h2 class="text-2xl font-bold mb-2">{{ libro.volumeInfo?.title }}</h2>
+      <p class="text-lg text-gray-700 mb-2">
+        <strong>Autor:</strong> {{ libro.volumeInfo?.authors?.join(', ') }}
+      </p>
+      <div
+        class="text-md text-gray-600"
+        [innerHTML]="libro.volumeInfo?.description || 'Sin sinopsis disponible.'"
+      ></div>
+
+      <!-- Si el libro NO está guardado aún -->
+      <div class="flex gap-2 mt-4" *ngIf="!libroGuardado">
+        <button mat-raised-button color="primary" class="accion-btn" (click)="guardarLibro('QUIERO_LEER')">
+          Quiero leer
+        </button>
+        <button mat-raised-button color="accent" class="accion-btn" (click)="guardarLibro('LEYENDO')">
+          Leyendo
+        </button>
+        <button mat-raised-button color="warn" class="accion-btn" (click)="guardarLibro('LEIDO')">
+          Leído
+        </button>
+      </div>
+
+      <!-- Si el libro YA está guardado -->
+      <div *ngIf="libroGuardado" class="mt-4">
+        <p class="text-green-700 font-medium">
+          Ya has añadido este libro a tu lista de
+          <strong>{{ libroGuardado.estado.toLowerCase().replace('_', ' ') }}</strong>.
+        </p>
+        <mat-divider class="my-3"></mat-divider>
+
+        <!-- Botón eliminar -->
+        <button mat-stroked-button color="warn" (click)="eliminarLibro()">
+          <mat-icon>delete</mat-icon>
+          Eliminar de mi lista
+        </button>
+
+
+        <!-- Botones para cambiar de lista -->
+        <div class="flex gap-2 mt-2">
+          <ng-container *ngIf="libroGuardado.estado !== 'QUIERO_LEER'">
+            <button mat-flat-button color="primary" (click)="cambiarEstado('QUIERO_LEER')">
+              <mat-icon>bookmark_add</mat-icon>
+              Mover a 'Quiero leer'
+            </button>
+          </ng-container>
+          <ng-container *ngIf="libroGuardado.estado !== 'LEYENDO'">
+            <button mat-flat-button color="accent" (click)="cambiarEstado('LEYENDO')">
+              <mat-icon>menu_book</mat-icon>
+              Mover a 'Leyendo'
+            </button>
+          </ng-container>
+          <ng-container *ngIf="libroGuardado.estado !== 'LEIDO'">
+            <button mat-flat-button color="warn" (click)="cambiarEstado('LEIDO')">
+              <mat-icon>done</mat-icon>
+              Mover a 'Leído'
+            </button>
+          </ng-container>
+        </div>
+
+        <mat-divider class="my-3"></mat-divider>
+
+        <!-- Campo para actualizar página -->
+        <div *ngIf="libroGuardado.estado === 'LEYENDO'" class="mt-3">
+          <mat-form-field appearance="fill">
+            <mat-label>Página actual</mat-label>
+            <input matInput type="number" [(ngModel)]="paginaInput" />
+            <span matSuffix *ngIf="totalPaginas">/ {{ totalPaginas }}</span>
+          </mat-form-field>
+
+
+          <button mat-raised-button color="primary" (click)="actualizarPagina(paginaInput)" class="ml-2">
+            <mat-icon>update</mat-icon>
+            Actualizar página
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="isLoading" class="text-center mt-5">
+  <p>Cargando detalles del libro...</p>
+</div>
+
+<div *ngIf="error" class="text-center mt-5 text-red-500">
+  <p>{{ error }}</p>
+</div>

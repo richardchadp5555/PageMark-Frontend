@@ -38,7 +38,8 @@ export class RegisterPagesComponent {
 
     this.authService.register(username, email, password).subscribe({
       next: () => {
-        localStorage.setItem('usuario', JSON.stringify({ username }));
+        // ✅ Guardamos usuario y contraseña igual que hace el login
+        localStorage.setItem('usuario', JSON.stringify({ username, password }));
         this.router.navigate(['/inicio']);
       },
       error: () => {

@@ -12,14 +12,17 @@
     <h2 class="text-2xl font-bold mb-2">Búsqueda de libros</h2>
     <p class="text-gray-600">Encuentra libros mediante Google Books API introduciendo el título, autor o palabra clave que desees.</p>
   </div>
-  
+
   <!-- Barra de búsqueda -->
   <app-search-bar (search)="onSearch($event)"></app-search-bar>
 
   <!-- Resultados de búsqueda -->
   <div class="grid mt-4" *ngIf="libros.length > 0">
     <div class="col-12 sm:col-6 md:col-4 lg:col-3 xl:col-2" *ngFor="let libro of libros">
-      <mat-card class="p-2 h-full shadow-4">
+      <mat-card
+        class="p-2 h-full shadow-4 cursor-pointer"
+        [routerLink]="['/detalles-libro', libro.id]"
+      >
         <img
           [src]="libro.volumeInfo.imageLinks?.thumbnail"
           alt="Portada"
