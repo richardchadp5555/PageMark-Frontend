@@ -37,9 +37,10 @@
               {{ actividad.mensaje }}
             </div>
 
+            <!-- Ver libro -->
             <div *ngIf="actividad.googleBookId">
               <a [routerLink]="['/detalles-libro', actividad.googleBookId]" mat-stroked-button color="accent">
-                Ver libro
+                Ver
               </a>
             </div>
           </div>

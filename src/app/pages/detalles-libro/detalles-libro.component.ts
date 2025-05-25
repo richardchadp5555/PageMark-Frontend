@@ -7,6 +7,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { LibrosService } from 'src/app/services/libros.service';
+import { ResenasService } from 'src/app/services/resenas.service';
+import { Resena } from 'src/app/interfaces/resena.interface';
 
 @Component({
   selector: 'app-detalles-libro',
@@ -21,53 +23,67 @@ export class DetallesLibroComponent implements OnInit {
   mensaje: string = '';
   isLoading = true;
   error = '';
+  resenasLibro: Resena[] = [];
+
+  resenaExistente: Resena | null = null;
+  idUsuario: string = '';
+  username: string = '';
 
   constructor(
     private route: ActivatedRoute,
-    private librosService: LibrosService
+    private librosService: LibrosService,
+    private resenasService: ResenasService
   ) {}
 
- ngOnInit(): void {
-  const id = this.route.snapshot.paramMap.get('id');
+  ngOnInit(): void {
+    const id = this.route.snapshot.paramMap.get('id');
 
-  if (id) {
-    this.librosService.obtenerDetallesDesdeGoogle(id).subscribe({
-      next: (data) => {
-        this.libro = data;
-        this.isLoading = false;
+    if (id) {
+      this.librosService.obtenerDetallesDesdeGoogle(id).subscribe({
+        next: (data) => {
+          this.libro = data;
+          this.isLoading = false;
 
-        const usuario = localStorage.getItem('usuario');
-        if (usuario) {
-          const { username } = JSON.parse(usuario);
+          const usuario = localStorage.getItem('usuario');
+          if (usuario) {
+            const user = JSON.parse(usuario);
+            this.username = user.username;
+            this.idUsuario = user.idUsuario;
 
-          this.librosService.obtenerLibroGuardado(username, this.libro.id).subscribe({
-            next: (guardado) => {
-              this.libroGuardado = guardado;
-              this.paginaInput = guardado?.pagina || 0;
-              this.totalPaginas = data.volumeInfo?.pageCount || null;
+            // Cargar libro guardado (si existe)
+            this.librosService.obtenerLibroGuardado(this.username, this.libro.id).subscribe({
+              next: (guardado) => {
+                this.libroGuardado = guardado;
+                this.paginaInput = guardado?.pagina || 0;
+                this.totalPaginas = data.volumeInfo?.pageCount || null;
 
+                // Comprobar si ya tiene reseña
+                this.resenasService.obtenerResenasPorUsuario(this.idUsuario).subscribe(resenas => {
+                  const yaTiene = resenas.find(r => r.googleBookId === this.libro.id);
+                  this.resenaExistente = yaTiene || null;
+                });
+              },
+              error: () => {
+                this.libroGuardado = null;
+              }
+            });
+          }
 
-            },
-            error: () => {
-              this.libroGuardado = null;
-            }
+          // Cargar reseñas públicas del libro por googleBookId
+          this.resenasService.obtenerResenasPorGoogleBookId(this.libro.id).subscribe(resenas => {
+            this.resenasLibro = resenas;
           });
+        },
+        error: () => {
+          this.error = 'Error al cargar los detalles del libro.';
+          this.isLoading = false;
         }
-      },
-      error: () => {
-        this.error = 'Error al cargar los detalles del libro.';
-        this.isLoading = false;
-      }
-    });
+      });
+    }
   }
-}
 
-
-
-  //Guarda el libro actual en la base de datos con el estado indicado ("QUIERO_LEER", "LEYENDO" o "LEIDO. Se utiliza el usuario del localStorage y se envían todos los datos relevantes del libro al backend.
   guardarLibro(estado: string): void {
     const usuario = localStorage.getItem('usuario');
-
     if (!usuario) {
       this.mensaje = 'Debes iniciar sesión para guardar libros.';
       return;
@@ -91,84 +107,90 @@ export class DetallesLibroComponent implements OnInit {
         this.recargarLibroGuardado();
       },
       error: (err) => {
-        if (err.status === 409) {
-          this.mensaje = 'Este libro ya está guardado en tu lista.';
-        } else {
-          this.mensaje = 'Error al guardar el libro.';
-        }
+        this.mensaje = err.status === 409
+          ? 'Este libro ya está guardado en tu lista.'
+          : 'Error al guardar el libro.';
       }
     });
   }
 
-  // Método para eliminar un libro guardado por el usuario
   eliminarLibro(): void {
-  if (!this.libroGuardado || !this.libroGuardado.id) {
-    this.mensaje = 'No se puede eliminar el libro. ID no disponible.';
-    return;
-  }
-
-  this.librosService.eliminarLibro(this.libroGuardado.id).subscribe({
-    next: () => {
-      this.mensaje = 'Libro eliminado de tu lista.';
-      this.libroGuardado = null;
-      this.paginaInput = 0;
-    },
-    error: () => {
-      this.mensaje = 'Error al eliminar el libro.';
+    if (!this.libroGuardado?.id) {
+      this.mensaje = 'No se puede eliminar el libro. ID no disponible.';
+      return;
     }
-  });
-}
 
-// Método para cambiar el estado del libro guardado (QUIERO_LEER, LEYENDO, LEIDO)
-cambiarEstado(nuevoEstado: string): void {
-  if (!this.libroGuardado || !this.libroGuardado.id) {
-    this.mensaje = 'No se puede cambiar el estado. ID no disponible.';
-    return;
-  }
-
-  this.librosService.actualizarEstadoLibro(this.libroGuardado.id, nuevoEstado).subscribe({
-    next: () => {
-      this.mensaje = `Estado actualizado a ${nuevoEstado.toLowerCase().replace('_', ' ')}.`;
-      this.recargarLibroGuardado();
-    },
-    error: () => {
-      this.mensaje = 'Error al actualizar el estado.';
-    }
-  });
-}
-
-// Método para actualizar la página del libro guardado
-actualizarPagina(pagina: number): void {
-  if (!this.libroGuardado || !this.libroGuardado.id) {
-    this.mensaje = 'No se puede actualizar la página. ID no disponible.';
-    return;
-  }
-
-  this.librosService.actualizarPagina(this.libroGuardado.id, pagina).subscribe({
-    next: () => {
-      this.mensaje = `Página actualizada a ${pagina}.`;
-      this.recargarLibroGuardado();
-    },
-    error: () => {
-      this.mensaje = 'Error al actualizar la página.';
-    }
-  });
-}
-
-
-// Vuelve a cargar el libro guardado desde la base de datos
-private recargarLibroGuardado(): void {
-  const usuario = localStorage.getItem('usuario');
-  if (usuario && this.libro?.id) {
-    const { username } = JSON.parse(usuario);
-    this.librosService.obtenerLibroGuardado(username, this.libro.id).subscribe({
-      next: (guardado) => {
-        this.libroGuardado = guardado;
-        this.paginaInput = guardado?.pagina || 0;
+    this.librosService.eliminarLibro(this.libroGuardado.id).subscribe({
+      next: () => {
+        this.mensaje = 'Libro eliminado de tu lista.';
+        this.libroGuardado = null;
+        this.paginaInput = 0;
+      },
+      error: () => {
+        this.mensaje = 'Error al eliminar el libro.';
       }
     });
   }
-}
 
+  cambiarEstado(nuevoEstado: string): void {
+    if (!this.libroGuardado?.id) {
+      this.mensaje = 'No se puede cambiar el estado. ID no disponible.';
+      return;
+    }
+
+    this.librosService.actualizarEstadoLibro(this.libroGuardado.id, nuevoEstado).subscribe({
+      next: () => {
+        this.mensaje = `Estado actualizado a ${nuevoEstado.toLowerCase().replace('_', ' ')}.`;
+        this.recargarLibroGuardado();
+      },
+      error: () => {
+        this.mensaje = 'Error al actualizar el estado.';
+      }
+    });
+  }
+
+  actualizarPagina(pagina: number): void {
+    if (!this.libroGuardado?.id) {
+      this.mensaje = 'No se puede actualizar la página. ID no disponible.';
+      return;
+    }
+
+    this.librosService.actualizarPagina(this.libroGuardado.id, pagina).subscribe({
+      next: () => {
+        this.mensaje = `Página actualizada a ${pagina}.`;
+        this.recargarLibroGuardado();
+      },
+      error: () => {
+        this.mensaje = 'Error al actualizar la página.';
+      }
+    });
+  }
+
+  private recargarLibroGuardado(): void {
+    const usuario = localStorage.getItem('usuario');
+    if (usuario && this.libro?.id) {
+      const { username } = JSON.parse(usuario);
+      this.librosService.obtenerLibroGuardado(username, this.libro.id).subscribe({
+        next: (guardado) => {
+          this.libroGuardado = guardado;
+          this.paginaInput = guardado?.pagina || 0;
+        }
+      });
+    }
+  }
+
+
+  refrescarResenas(): void {
+  // Actualizar lista de reseñas públicas
+  this.resenasService.obtenerResenasPorGoogleBookId(this.libro.id).subscribe(resenas => {
+    this.resenasLibro = resenas;
+  });
+
+  // Volver a comprobar si el usuario tiene ya una reseña (oculta el form)
+  this.resenasService.obtenerResenasPorUsuario(this.idUsuario).subscribe(resenas => {
+    const yaTiene = resenas.find(r => r.googleBookId === this.libro.id);
+    this.resenaExistente = yaTiene || null;
+  });
+}
 
 }

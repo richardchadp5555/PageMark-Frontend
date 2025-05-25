@@ -52,7 +52,6 @@
           Eliminar de mi lista
         </button>
 
-
         <!-- Botones para cambiar de lista -->
         <div class="flex gap-2 mt-2">
           <ng-container *ngIf="libroGuardado.estado !== 'QUIERO_LEER'">
@@ -85,13 +84,56 @@
             <span matSuffix *ngIf="totalPaginas">/ {{ totalPaginas }}</span>
           </mat-form-field>
 
-
           <button mat-raised-button color="primary" (click)="actualizarPagina(paginaInput)" class="ml-2">
             <mat-icon>update</mat-icon>
             Actualizar página
           </button>
         </div>
 
+        <!-- Formulario para dejar una reseña -->
+        <app-resena-form
+          *ngIf="libroGuardado?.estado === 'LEIDO' && !resenaExistente"
+          [libroId]="libroGuardado.id"
+          [googleBookId]="libro.id"
+          [titulo]="libro.volumeInfo?.title"
+          [idUsuario]="idUsuario"
+          [username]="username"
+          (resenaPublicada)="refrescarResenas()"> <!-- 👈 Aquí -->
+        </app-resena-form>
+      </div>
+
+      <!-- Reseñas públicas (SIEMPRE visibles) -->
+      <mat-divider class="my-5"></mat-divider>
+
+      <h3 class="text-xl font-bold mb-3">Reseñas de otros lectores</h3>
+
+      <div *ngIf="resenasLibro.length === 0" class="text-gray-500">
+        Aún no hay reseñas publicadas para este libro.
+      </div>
+
+      <div *ngFor="let resena of resenasLibro" class="mb-4">
+        <mat-card class="p-3 shadow-1">
+          <div class="flex align-items-center justify-content-between mb-2">
+            <div class="flex align-items-center gap-2">
+              <mat-icon>account_circle</mat-icon>
+              <span class="font-medium text-md">{{ resena.username }}</span>
+            </div>
+            <div class="text-sm text-gray-500">
+              {{ resena.fecha | date:'shortDate' }}
+            </div>
+          </div>
+
+          <div class="flex align-items-center mb-2">
+            <mat-icon
+              *ngFor="let star of [1, 2, 3, 4, 5]"
+              class="text-yellow-600"
+            >{{ star <= resena.puntuacion ? 'star' : 'star_border' }}</mat-icon>
+          </div>
+
+          <div class="text-gray-800 text-sm whitespace-pre-wrap">
+            {{ resena.comentario }}
+          </div>
+        </mat-card>
       </div>
     </div>
   </div>

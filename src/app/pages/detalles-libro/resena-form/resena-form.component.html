@@ -1,1 +1,29 @@
-<p>resena-form works!</p>
+<mat-card *ngIf="!enviado" class="p-3 shadow-1">
+  <h3 class="mb-2">Deja tu reseña sobre <strong>"{{ titulo }}"</strong></h3>
+
+  <div class="mb-2">
+    <label class="font-medium">Tu puntuación:</label>
+    <div class="flex align-items-center gap-1">
+      <mat-icon
+        *ngFor="let star of [1, 2, 3, 4, 5]"
+        [ngClass]="{ 'text-yellow-600': star <= puntuacion }"
+        (click)="puntuacion = star"
+        style="cursor: pointer;"
+      >{{ star <= puntuacion ? 'star' : 'star_border' }}</mat-icon>
+    </div>
+  </div>
+
+  <mat-form-field appearance="fill" class="w-full mt-3">
+    <mat-label>Comentario</mat-label>
+    <textarea matInput [(ngModel)]="comentario" rows="4"></textarea>
+  </mat-form-field>
+
+  <button mat-raised-button color="primary" (click)="enviarResena()">Publicar reseña</button>
+
+  <p *ngIf="mensaje" class="text-sm mt-2 text-gray-600">{{ mensaje }}</p>
+</mat-card>
+
+<mat-card *ngIf="enviado" class="p-3 shadow-1 bg-green-50 border-round">
+  <h4 class="text-green-700">¡Gracias por tu reseña!</h4>
+  <p>Tu opinión se ha publicado correctamente.</p>
+</mat-card>

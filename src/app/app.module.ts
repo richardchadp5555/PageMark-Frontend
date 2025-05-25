@@ -14,13 +14,11 @@ import { AppComponent } from './app.component';
 
 import { SharedModule } from './shared/shared.module';
 import { MaterialModule } from './material/material.module';
-import { PagesModule } from './pages/pages.module';
-import { ResenaFormComponent } from './detalles-libro/components/resena-form/resena-form.component';
+import { PagesModule } from './pages/pages.module';;
 
 @NgModule({
   declarations: [
-    AppComponent,
-    ResenaFormComponent
+    AppComponent
   ],
   imports: [
     BrowserModule,

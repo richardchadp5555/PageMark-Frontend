@@ -8,7 +8,6 @@ import { InicioComponent } from './pages/inicio/inicio.component';
 import { BuscarLibrosComponent } from './pages/buscar-libros/buscar-libros/buscar-libros.component';
 import { MisLibrosComponent } from './pages/mis-libros/mis-libros.component';
 import { DetallesLibroComponent } from './pages/detalles-libro/detalles-libro.component';
-import { ResenasComponent } from './pages/resenas/resenas.component';
 import { NoticiasComponent } from './pages/noticias/noticias.component';
 
 const routes: Routes = [
@@ -35,7 +34,6 @@ const routes: Routes = [
       { path: 'buscar', component: BuscarLibrosComponent },
       { path: 'mis-libros', component: MisLibrosComponent },
       { path: 'detalles-libro/:id', component: DetallesLibroComponent },
-      { path: 'resenas', component: ResenasComponent },
       { path: 'noticias', component: NoticiasComponent }
     ]
   },

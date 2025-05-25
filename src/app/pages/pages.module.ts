@@ -21,6 +21,7 @@ import { BuscarLibrosComponent } from './buscar-libros/buscar-libros/buscar-libr
 import { SearchBarComponent } from './buscar-libros/search-bar/search-bar.component';
 import { LibrosPopularesComponent } from './buscar-libros/libros-populares/libros-populares.component';
 import { FeedActividadComponent } from './inicio/feed-actividad/feed-actividad.component';
+import { ResenaDetalleComponent } from './detalles-libro/resena-detalle/resena-detalle.component';
 
 
 
@@ -36,6 +37,7 @@ import { FeedActividadComponent } from './inicio/feed-actividad/feed-actividad.c
     SearchBarComponent,
     LibrosPopularesComponent,
     FeedActividadComponent,
+    ResenaDetalleComponent,
 
   ],
   imports: [
