@@ -17,17 +17,20 @@ export class FeedService {
   constructor(private http: HttpClient) {}
 
   // Devuelve el feed global de actividades con paginación
-  obtenerFeed(page: number, size: number): Observable<any[]> {
-    const usuario = localStorage.getItem('usuario');
-    if (!usuario) throw new Error('No hay usuario autenticado');
+ obtenerFeed(page: number, size: number): Observable<{ content: any[] }> {
 
-    const { username, password } = JSON.parse(usuario);
-    const headers = new HttpHeaders({
-      Authorization: `Basic ${btoa(`${username}:${password}`)}`
-    });
+  const usuario = localStorage.getItem('usuario');
+  if (!usuario) throw new Error('No hay usuario autenticado');
 
-    return this.http.get<any[]>(`${this.apiUrl}?page=${page}&size=${size}`, { headers });
-  }
+  const { username, password } = JSON.parse(usuario);
+  const headers = new HttpHeaders({
+    Authorization: `Basic ${btoa(`${username}:${password}`)}`
+  });
+
+  return this.http.get<{ content: any[] }>(`${this.apiUrl}/paginado?page=${page}&size=${size}`, { headers });
+
+}
+
 
   // Devuelve el feed de un usuario específico (no paginado por ahora)
   obtenerFeedPorUsuario(username: string): Observable<any[]> {

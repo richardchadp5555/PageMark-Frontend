@@ -13,7 +13,7 @@ import { MaterialModule } from '../material/material.module';
 import { InicioComponent } from './inicio/inicio.component';
 import { MisLibrosComponent } from './mis-libros/mis-libros.component';
 import { DetallesLibroComponent } from './detalles-libro/detalles-libro.component';
-import { ResenasComponent } from './resenas/resenas.component';
+import { ResenaFormComponent } from './detalles-libro/resena-form/resena-form.component';
 import { NoticiasComponent } from './noticias/noticias.component';
 
 // Componentes de buscar-libros
@@ -22,17 +22,21 @@ import { SearchBarComponent } from './buscar-libros/search-bar/search-bar.compon
 import { LibrosPopularesComponent } from './buscar-libros/libros-populares/libros-populares.component';
 import { FeedActividadComponent } from './inicio/feed-actividad/feed-actividad.component';
 
+
+
+
 @NgModule({
   declarations: [
     InicioComponent,
     MisLibrosComponent,
     DetallesLibroComponent,
-    ResenasComponent,
+    ResenaFormComponent,
     NoticiasComponent,
     BuscarLibrosComponent,
     SearchBarComponent,
     LibrosPopularesComponent,
-    FeedActividadComponent
+    FeedActividadComponent,
+
   ],
   imports: [
     CommonModule,

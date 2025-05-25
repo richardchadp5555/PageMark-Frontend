@@ -31,10 +31,11 @@ export class FeedActividadComponent implements OnInit {
 
     this.feedService.obtenerFeed(this.page, this.size).subscribe({
       next: (data) => {
-        this.actividades.push(...data);
+        this.actividades.push(...data.content);
         this.isLoading = false;
         this.cargandoMas = false;
-        if (data.length < this.size) this.noHayMas = true;
+
+        if (data.content.length < this.size) this.noHayMas = true;
         else this.page++;
       },
       error: () => {
@@ -45,11 +46,5 @@ export class FeedActividadComponent implements OnInit {
     });
   }
 
-  getColorParaUsuario(username: string): string {
-    const colores = [
-      '#f9f4ea', '#e6f0f7', '#fef7ec', '#edf7f6', '#f3f0ff', '#fff0f0'
-    ];
-    const hash = [...username].reduce((acc, char) => acc + char.charCodeAt(0), 0);
-    return colores[hash % colores.length];
-  }
+
 }
