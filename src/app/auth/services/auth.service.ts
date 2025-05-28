@@ -27,7 +27,8 @@ export class AuthService {
     return new Observable(observer => {
       this.http.post(`${this.apiUrl}/login`, body).subscribe({
         next: (res: any) => {
-          localStorage.setItem('usuario', JSON.stringify({ username, password }));
+          const rol = res.rol; // obtenemos el rol del backend
+          localStorage.setItem('usuario', JSON.stringify({ username, password, rol }));
           observer.next(res);
           observer.complete();
         },

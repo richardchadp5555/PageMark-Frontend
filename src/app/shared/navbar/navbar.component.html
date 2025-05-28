@@ -28,6 +28,12 @@
           <span>Noticias</span>
         </a>
       </li>
+      <li class="custom-navbar__item" *ngIf="esAdmin">
+        <a routerLink="/admin" routerLinkActive="active" class="custom-navbar__link">
+          <mat-icon>settings</mat-icon>
+          <span>Admin</span>
+        </a>
+      </li>      
     </ul>
   </nav>
 </header>
