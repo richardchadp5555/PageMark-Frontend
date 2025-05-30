@@ -19,7 +19,7 @@ export class ResenaFormComponent {
   @Input() idUsuario!: string;
   @Input() username!: string;
 
-  @Output() reseñaPublicada = new EventEmitter<void>(); // 👈 Evento al publicar
+  @Output() resenaPublicada = new EventEmitter<void>(); // 👈 Evento al publicar
 
   puntuacion = 0;
   comentario = '';
@@ -43,7 +43,7 @@ export class ResenaFormComponent {
       next: () => {
         this.enviado = true;
         this.mensaje = '¡Reseña publicada con éxito!';
-        this.reseñaPublicada.emit(); // 👈 Dispara evento hacia el padre
+        this.resenaPublicada.emit(); //  Dispara evento hacia el padre
       },
       error: (err) => {
         this.mensaje = err.status === 409 ? 'Ya has reseñado este libro.' : 'Error al enviar reseña.';

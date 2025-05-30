@@ -23,13 +23,20 @@ export class AuthService {
   //              guarda el usuario y contraseña en localStorage (para autenticación Basic).
   login(username: string, password: string): Observable<any> {
     const body = { username, password };
-
+  
     return new Observable(observer => {
       this.http.post(`${this.apiUrl}/login`, body).subscribe({
         next: (res: any) => {
-          const rol = res.rol; // obtenemos el rol del backend
-          localStorage.setItem('usuario', JSON.stringify({ username, password, rol }));
-          observer.next(res);
+          if (res?.rol) {
+            localStorage.setItem('usuario', JSON.stringify({
+              username,
+              password,
+              rol: res.rol
+            }));
+            observer.next(res);
+          } else {
+            observer.error('Respuesta del backend incompleta');
+          }
           observer.complete();
         },
         error: () => {
@@ -38,6 +45,7 @@ export class AuthService {
       });
     });
   }
+  
 
   // Método: register()
   // Descripción: Registra un nuevo usuario. Si el registro es correcto,

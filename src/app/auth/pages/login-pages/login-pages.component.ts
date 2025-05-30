@@ -50,18 +50,15 @@ export class LoginPagesComponent {
   
     this.authService.login(username, password).subscribe({
       next: () => {
-        // ⚠️ Guardamos las credenciales introducidas, NO la respuesta del backend
-        localStorage.setItem('usuario', JSON.stringify({ username, password }));
-        this.router.navigate(['/inicio']);
+        this.router.navigate(['/inicio']); // No toques localStorage aquí
       },
-    
       error: () => {
         this.loading = false;
         alert('Usuario o contraseña incorrectos');
         this.paso = 1;
       }
     });
-  }
+  }  
   
   
 }

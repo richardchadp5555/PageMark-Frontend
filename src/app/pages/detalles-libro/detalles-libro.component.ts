@@ -1,7 +1,8 @@
 // Proyecto: PageMark
 // Archivo: detalles-libro.component.ts
-// Descripción: Vista de detalles de un libro consultando directamente a Google Books API
-//              Permite al usuario guardar el libro en su lista personal con estado "QUIERO_LEER", "LEYENDO" o "LEIDO"
+// Descripción: Vista de detalles de un libro consultando directamente a Google Books API.
+//              Permite al usuario guardar libros en su lista, actualizar el estado o página de lectura,
+//              y dejar/ver reseñas públicas.
 // Autor: Richard Chadwick Plaza - 2º DAM
 
 import { Component, OnInit } from '@angular/core';
@@ -16,16 +17,26 @@ import { Resena } from 'src/app/interfaces/resena.interface';
   styleUrls: ['./detalles-libro.component.scss']
 })
 export class DetallesLibroComponent implements OnInit {
+  // Información del libro obtenido desde Google Books API
   libro: any = null;
+
+  // Control de página actual y total de páginas (si el libro está en estado "LEYENDO")
   paginaInput: number = 0;
   totalPaginas: number | null = null;
+
+  // Si el libro ya ha sido guardado por el usuario
   libroGuardado: any = null;
+
+  // Mensajes informativos y estado de carga
   mensaje: string = '';
   isLoading = true;
   error = '';
-  resenasLibro: Resena[] = [];
 
+  // Reseñas públicas y del usuario actual
+  resenasLibro: Resena[] = [];
   resenaExistente: Resena | null = null;
+
+  // Información del usuario autenticado
   idUsuario: string = '';
   username: string = '';
 
@@ -35,53 +46,78 @@ export class DetallesLibroComponent implements OnInit {
     private resenasService: ResenasService
   ) {}
 
+  // Al iniciar la vista
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
+    if (!id) return;
 
-    if (id) {
-      this.librosService.obtenerDetallesDesdeGoogle(id).subscribe({
-        next: (data) => {
-          this.libro = data;
-          this.isLoading = false;
+    // Obtener detalles del libro desde Google Books API
+    this.librosService.obtenerDetallesDesdeGoogle(id).subscribe({
+      next: (data) => {
+        this.libro = data;
+        this.isLoading = false;
 
-          const usuario = localStorage.getItem('usuario');
-          if (usuario) {
-            const user = JSON.parse(usuario);
-            this.username = user.username;
-            this.idUsuario = user.idUsuario;
-
-            // Cargar libro guardado (si existe)
-            this.librosService.obtenerLibroGuardado(this.username, this.libro.id).subscribe({
-              next: (guardado) => {
-                this.libroGuardado = guardado;
-                this.paginaInput = guardado?.pagina || 0;
-                this.totalPaginas = data.volumeInfo?.pageCount || null;
-
-                // Comprobar si ya tiene reseña
-                this.resenasService.obtenerResenasPorUsuario(this.idUsuario).subscribe(resenas => {
-                  const yaTiene = resenas.find(r => r.googleBookId === this.libro.id);
-                  this.resenaExistente = yaTiene || null;
-                });
-              },
-              error: () => {
-                this.libroGuardado = null;
-              }
-            });
-          }
-
-          // Cargar reseñas públicas del libro por googleBookId
-          this.resenasService.obtenerResenasPorGoogleBookId(this.libro.id).subscribe(resenas => {
-            this.resenasLibro = resenas;
-          });
-        },
-        error: () => {
-          this.error = 'Error al cargar los detalles del libro.';
-          this.isLoading = false;
-        }
-      });
-    }
+        this.inicializarUsuario();         // 🔐 Extraer usuario del localStorage
+        this.cargarLibroGuardado();        // 📖 Cargar información si el libro ya está en la lista
+        this.cargarResenasIniciales();     // ⭐ Mostrar reseñas públicas del libro
+      },
+      error: () => {
+        this.error = 'Error al cargar los detalles del libro.';
+        this.isLoading = false;
+      }
+    });
   }
 
+  // Obtiene el usuario actual desde localStorage
+  private inicializarUsuario(): void {
+    const usuario = localStorage.getItem('usuario');
+    if (!usuario) return;
+
+    const user = JSON.parse(usuario);
+    this.username = user.username;
+    this.idUsuario = user.idUsuario;
+  }
+
+  // Carga la información del libro si el usuario ya lo tiene guardado
+  private cargarLibroGuardado(): void {
+    if (!this.username || !this.libro?.id) return;
+
+    this.librosService.obtenerLibroGuardado(this.username, this.libro.id).subscribe({
+      next: (guardado) => {
+        this.libroGuardado = guardado;
+        this.paginaInput = guardado?.pagina || 0;
+        this.totalPaginas = this.libro.volumeInfo?.pageCount || null;
+
+        // Verificar si ya ha hecho una reseña sobre este libro
+        this.resenasService.obtenerResenasPorUsuario(this.idUsuario).subscribe(resenas => {
+          const yaTiene = resenas.find(r => r.googleBookId === this.libro.id);
+          this.resenaExistente = yaTiene || null;
+        });
+      },
+      error: () => {
+        this.libroGuardado = null;
+      }
+    });
+  }
+
+  // Carga las reseñas públicas de otros usuarios sobre este libro
+  private cargarResenasIniciales(): void {
+    this.resenasService.obtenerResenasPorGoogleBookId(this.libro.id).subscribe(resenas => {
+      this.resenasLibro = resenas;
+    });
+  }
+
+  // Vuelve a cargar las reseñas tras publicar o editar una
+  refrescarResenas(): void {
+    this.cargarResenasIniciales();
+
+    this.resenasService.obtenerResenasPorUsuario(this.idUsuario).subscribe(resenas => {
+      const yaTiene = resenas.find(r => r.googleBookId === this.libro.id);
+      this.resenaExistente = yaTiene || null;
+    });
+  }
+
+  // Añade un libro a la lista del usuario con un estado inicial
   guardarLibro(estado: string): void {
     const usuario = localStorage.getItem('usuario');
     if (!usuario) {
@@ -114,6 +150,7 @@ export class DetallesLibroComponent implements OnInit {
     });
   }
 
+  // Elimina un libro de la lista del usuario
   eliminarLibro(): void {
     if (!this.libroGuardado?.id) {
       this.mensaje = 'No se puede eliminar el libro. ID no disponible.';
@@ -132,6 +169,7 @@ export class DetallesLibroComponent implements OnInit {
     });
   }
 
+  // Cambia el estado de un libro guardado (por ejemplo de QUIERO_LEER a LEIDO)
   cambiarEstado(nuevoEstado: string): void {
     if (!this.libroGuardado?.id) {
       this.mensaje = 'No se puede cambiar el estado. ID no disponible.';
@@ -149,6 +187,7 @@ export class DetallesLibroComponent implements OnInit {
     });
   }
 
+  // Actualiza la página actual de lectura de un libro en estado "LEYENDO"
   actualizarPagina(pagina: number): void {
     if (!this.libroGuardado?.id) {
       this.mensaje = 'No se puede actualizar la página. ID no disponible.';
@@ -166,6 +205,7 @@ export class DetallesLibroComponent implements OnInit {
     });
   }
 
+  // Refresca los datos del libro guardado tras una acción como guardar, cambiar estado o página
   private recargarLibroGuardado(): void {
     const usuario = localStorage.getItem('usuario');
     if (usuario && this.libro?.id) {
@@ -178,19 +218,4 @@ export class DetallesLibroComponent implements OnInit {
       });
     }
   }
-
-
-  refrescarResenas(): void {
-  // Actualizar lista de reseñas públicas
-  this.resenasService.obtenerResenasPorGoogleBookId(this.libro.id).subscribe(resenas => {
-    this.resenasLibro = resenas;
-  });
-
-  // Volver a comprobar si el usuario tiene ya una reseña (oculta el form)
-  this.resenasService.obtenerResenasPorUsuario(this.idUsuario).subscribe(resenas => {
-    const yaTiene = resenas.find(r => r.googleBookId === this.libro.id);
-    this.resenaExistente = yaTiene || null;
-  });
-}
-
 }

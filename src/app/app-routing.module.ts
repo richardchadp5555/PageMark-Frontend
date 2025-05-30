@@ -33,7 +33,7 @@ const routes: Routes = [
     component: LayoutComponent,
     children: [
       { path: 'inicio', component: InicioComponent },
-      { path: 'buscar', component: BuscarLibrosComponent },
+      { path: 'buscar-libros', component: BuscarLibrosComponent },
       { path: 'mis-libros', component: MisLibrosComponent },
       { path: 'detalles-libro/:id', component: DetallesLibroComponent },
       { path: 'noticias', component: NoticiasComponent },

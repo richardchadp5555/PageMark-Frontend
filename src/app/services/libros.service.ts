@@ -6,6 +6,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
+import { ResultadoBusqueda } from '../interfaces/libro-google.interface';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -16,24 +17,27 @@ export class LibrosService {
 
   constructor(private http: HttpClient) {}
 
-  buscarLibros(query: string): Observable<any> {
-    const usuario = localStorage.getItem('usuario');
+// Busca libros mediante Google Books API a través del backend.
+// Parámetro: query (texto de búsqueda).
+// Retorna: observable con los resultados tipados como ResultadoBusqueda.
+buscarLibros(query: string, maxResults: number = 40, startIndex: number = 0): Observable<ResultadoBusqueda> {
+  const usuario = localStorage.getItem('usuario');
 
-    if (!usuario) {
-      throw new Error('No hay usuario autenticado');
-    }
-
-    const { username, password } = JSON.parse(usuario);
-    const basicToken = btoa(`${username}:${password}`);
-    const headers = {
-      Authorization: `Basic ${basicToken}`
-    };
-
-    return this.http.get(`${this.apiUrl}/buscar?q=${encodeURIComponent(query)}`, {
-      headers,
-      responseType: 'text'
-    });
+  if (!usuario) {
+    throw new Error('No hay usuario autenticado');
   }
+
+  const { username, password } = JSON.parse(usuario);
+  const basicToken = btoa(`${username}:${password}`);
+  const headers = {
+    Authorization: `Basic ${basicToken}`
+  };
+
+  const url = `${this.apiUrl}/buscar?q=${encodeURIComponent(query)}&maxResults=${maxResults}&startIndex=${startIndex}`;
+
+  return this.http.get<ResultadoBusqueda>(url, { headers });
+}
+
 
   obtenerLibrosPopulares(): Observable<any> {
     const usuario = localStorage.getItem('usuario');

@@ -21,8 +21,8 @@ import { BuscarLibrosComponent } from './buscar-libros/buscar-libros/buscar-libr
 import { SearchBarComponent } from './buscar-libros/search-bar/search-bar.component';
 import { LibrosPopularesComponent } from './buscar-libros/libros-populares/libros-populares.component';
 import { FeedActividadComponent } from './inicio/feed-actividad/feed-actividad.component';
-import { ResenaDetalleComponent } from './detalles-libro/resena-detalle/resena-detalle.component';
 import { AdminComponent } from './admin/admin.component';
+import { SelectorUsuarioComponent } from './admin/selector-usuario/selector-usuario.component';
 
 
 
@@ -38,8 +38,8 @@ import { AdminComponent } from './admin/admin.component';
     SearchBarComponent,
     LibrosPopularesComponent,
     FeedActividadComponent,
-    ResenaDetalleComponent,
     AdminComponent,
+    SelectorUsuarioComponent,
 
   ],
   imports: [

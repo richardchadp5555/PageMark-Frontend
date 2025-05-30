@@ -1,1 +1,149 @@
-<p>admin works!</p>
+<div class="p-4">
+  <h2>Gestión de usuarios</h2>
+
+  <p *ngIf="cargando">Cargando usuarios...</p>
+  <p *ngIf="error" class="text-danger">{{ error }}</p>
+
+  <app-selector-usuario
+    [usuarios]="usuarios"
+    label="Seleccionar usuario"
+    (usuarioSeleccionado)="seleccionarUsuario($event)"
+  ></app-selector-usuario>
+
+  <div *ngIf="usuarioSeleccionado" class="mt-4">
+    <!-- Sección: Editar credenciales -->
+    <h3>Editar credenciales</h3>
+
+    <div class="flex flex-column gap-3">
+      <mat-form-field appearance="outline">
+        <mat-label>Nuevo nombre de usuario</mat-label>
+        <input matInput [(ngModel)]="formularioEdicion.username" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Nuevo correo electrónico</mat-label>
+        <input matInput [(ngModel)]="formularioEdicion.email" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Nueva contraseña</mat-label>
+        <input matInput type="password" [(ngModel)]="formularioEdicion.password" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Rol</mat-label>
+        <mat-select [(ngModel)]="formularioEdicion.rol">
+          <mat-option value="USER">USER</mat-option>
+          <mat-option value="ADMIN">ADMIN</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" (click)="guardarCambios()">Guardar cambios</button>
+    </div>
+
+    <!-- Libros por estado -->
+    <hr class="my-4" />
+    <h3>Libros guardados</h3>
+    <button mat-stroked-button color="accent" (click)="verLibrosGuardados()">Ver libros</button>
+
+    <div *ngIf="viendoLibros" class="mt-4">
+      <!-- QUIERO LEER -->
+      <h4>Quiero leer</h4>
+      <table class="tabla-usuarios" *ngIf="librosQuieroLeer.length > 0">
+        <thead>
+          <tr>
+            <th>Portada</th>
+            <th>Título</th>
+            <th>Autor</th>
+            <th>Página</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let libro of librosQuieroLeer">
+            <td><img [src]="libro.imagen" alt="Portada" width="50" /></td>
+            <td>{{ libro.titulo }}</td>
+            <td>{{ libro.autor }}</td>
+            <td>{{ libro.pagina || 0 }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <p *ngIf="librosQuieroLeer.length === 0">No hay libros en esta lista.</p>
+
+      <!-- LEYENDO -->
+      <h4 class="mt-5">Leyendo</h4>
+      <table class="tabla-usuarios" *ngIf="librosLeyendo.length > 0">
+        <thead>
+          <tr>
+            <th>Portada</th>
+            <th>Título</th>
+            <th>Autor</th>
+            <th>Página</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let libro of librosLeyendo">
+            <td><img [src]="libro.imagen" alt="Portada" width="50" /></td>
+            <td>{{ libro.titulo }}</td>
+            <td>{{ libro.autor }}</td>
+            <td>{{ libro.pagina || 0 }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <p *ngIf="librosLeyendo.length === 0">No hay libros en esta lista.</p>
+
+      <!-- LEÍDO -->
+      <h4 class="mt-5">Leído</h4>
+      <table class="tabla-usuarios" *ngIf="librosLeido.length > 0">
+        <thead>
+          <tr>
+            <th>Portada</th>
+            <th>Título</th>
+            <th>Autor</th>
+            <th>Página</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let libro of librosLeido">
+            <td><img [src]="libro.imagen" alt="Portada" width="50" /></td>
+            <td>{{ libro.titulo }}</td>
+            <td>{{ libro.autor }}</td>
+            <td>{{ libro.pagina || 0 }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <p *ngIf="librosLeido.length === 0">No hay libros en esta lista.</p>
+    </div>
+    <!-- Reseñas -->
+    <hr class="my-4" />
+    <h3>Reseñas del usuario</h3>
+    <button mat-stroked-button color="accent" (click)="verResenasUsuario()">Ver reseñas</button>
+
+    <div *ngIf="viendoResenas" class="mt-4">
+      <div *ngIf="resenasUsuario.length > 0" class="grid gap-4">
+        <div
+          class="col-12 sm:col-6 md:col-4 lg:col-3"
+          *ngFor="let r of resenasUsuario"
+        >
+          <mat-card class="shadow-4 p-3 h-full">
+            <img
+              *ngIf="r.imagen"
+              [src]="r.imagen"
+              alt="Portada del libro"
+              class="w-full border-round mb-2"
+              style="height: 300px; object-fit: cover;"
+            />
+
+            <h4 class="mb-1">{{ r.titulo }}</h4>
+            <p class="text-sm text-muted mb-2">Puntuación: {{ r.puntuacion }} / 5</p>
+            <p>"{{ r.comentario }}"</p>
+          </mat-card>
+        </div>
+      </div>
+
+      <p *ngIf="resenasUsuario.length === 0" class="mt-3">
+        Este usuario no ha publicado reseñas.
+      </p>
+    </div>
+
+
+</div>

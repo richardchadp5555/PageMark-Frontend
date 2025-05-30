@@ -40,6 +40,19 @@ export class ResenasService {
     return this.http.get<Resena[]>(`${this.apiUrl}/usuario/${idUsuario}`, { headers: this.getHeaders() });
   }
 
+  // Obtener reseñas de un usuario por su usernme
+  obtenerResenasPorUsername(username: string): Observable<Resena[]> {
+    const usuario = localStorage.getItem('usuario');
+    if (!usuario) throw new Error('No hay usuario autenticado');
+  
+    const { username: u, password } = JSON.parse(usuario);
+    const headers = {
+      Authorization: `Basic ${btoa(`${u}:${password}`)}`
+    };
+  
+    return this.http.get<Resena[]>(`${this.apiUrl}/username/${username}`, { headers });
+  }
+  
   actualizarResena(id: string, resena: Resena): Observable<Resena> {
     return this.http.put<Resena>(`${this.apiUrl}/${id}`, resena, { headers: this.getHeaders() });
   }
