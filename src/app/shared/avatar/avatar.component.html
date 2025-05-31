@@ -1,14 +1,17 @@
-<div class="avatar-header">
+<!-- Proyecto: PageMark -->
+<!-- Archivo: avatar.component.html -->
+<!-- Descripción: Botón avatar que lleva al perfil y muestra imagen o icono -->
+<!-- Autor: Richard Chadwick Plaza - 2º DAM -->
+
+<button mat-button class="avatar-button" (click)="irAlPerfil()">
   <span class="username">{{ username }}</span>
-
-  <button mat-icon-button [matMenuTriggerFor]="menu">
+  <img
+    *ngIf="avatarUrl; else defaultIcon"
+    [src]="avatarUrl"
+    class="avatar-img"
+    alt="Avatar"
+  />
+  <ng-template #defaultIcon>
     <mat-icon class="avatar-icon">account_circle</mat-icon>
-  </button>
-
-  <mat-menu #menu="matMenu" class="logout-menu">
-    <button mat-menu-item (click)="logout()" class="logout-item">
-      <mat-icon>logout</mat-icon>
-      <span>Cerrar sesión</span>
-    </button>
-  </mat-menu>
-</div>
+  </ng-template>
+</button>

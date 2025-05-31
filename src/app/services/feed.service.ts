@@ -32,16 +32,21 @@ export class FeedService {
 }
 
 
-  // Devuelve el feed de un usuario específico (no paginado por ahora)
-  obtenerFeedPorUsuario(username: string): Observable<any[]> {
+  // Devuelve el feed personal del usuario con paginación
+  obtenerFeedPaginadoUsuario(username: string, page: number, size: number): Observable<{ content: any[] }> {
     const usuario = localStorage.getItem('usuario');
     if (!usuario) throw new Error('No hay usuario autenticado');
 
-    const { username: u, password } = JSON.parse(usuario);
+    const { username: authUser, password } = JSON.parse(usuario);
     const headers = new HttpHeaders({
-      Authorization: `Basic ${btoa(`${u}:${password}`)}`
+      Authorization: `Basic ${btoa(`${authUser}:${password}`)}`
     });
 
-    return this.http.get<any[]>(`${this.apiUrl}/${username}`, { headers });
-  }
+    return this.http.get<{ content: any[] }>(
+      `${this.apiUrl}/paginado-usuario?username=${username}&page=${page}&size=${size}`,
+      { headers }
+  );
+}
+
+  
 }

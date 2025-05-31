@@ -1,0 +1,31 @@
+<!-- Proyecto: PageMark -->
+<!-- Archivo: busqueda-usuarios.component.html -->
+<!-- Descripción: Barra de búsqueda de usuarios por nombre -->
+<!-- Autor: Richard Chadwick Plaza - 2º DAM -->
+
+<mat-form-field appearance="fill" class="w-full">
+    <mat-label>Buscar usuario</mat-label>
+    <input
+      type="text"
+      matInput
+      [formControl]="searchInput"
+      (keyup.enter)="onSearch()"
+      placeholder="Introduce el nombre de usuario"
+    />
+  </mat-form-field>
+  
+  <!-- Resultados -->
+  <div *ngIf="usuarios.length > 0" class="mt-4">
+    <div *ngFor="let user of usuarios" class="p-2 border-bottom border-gray-300 flex justify-between items-center">
+      <div>
+        <strong>{{ user.username }}</strong>
+      </div>
+      <button mat-stroked-button color="primary" (click)="verPerfil(user.username)">
+        Ver perfil de {{ user.username }}
+      </button>      
+  </div>
+  
+  <div *ngIf="usuarios.length === 0 && buscado" class="text-gray-500 mt-3">
+    No se encontraron usuarios con ese nombre.
+  </div>
+  

@@ -23,6 +23,11 @@ import { LibrosPopularesComponent } from './buscar-libros/libros-populares/libro
 import { FeedActividadComponent } from './inicio/feed-actividad/feed-actividad.component';
 import { AdminComponent } from './admin/admin.component';
 import { SelectorUsuarioComponent } from './admin/selector-usuario/selector-usuario.component';
+import { PerfilUserComponent } from './perfil-user/perfil-user.component';
+import { BusquedaUsuariosComponent } from './perfil-user/busqueda-usuarios/busqueda-usuarios.component';
+import { ListaAmigosComponent } from './perfil-user/lista-amigos/lista-amigos.component';
+import { ListaSeguidoresComponent } from './perfil-user/lista-seguidores/lista-seguidores.component';
+import { FeedPersonalComponent } from './perfil-user/feed-personal/feed-personal.component';
 
 
 
@@ -40,6 +45,11 @@ import { SelectorUsuarioComponent } from './admin/selector-usuario/selector-usua
     FeedActividadComponent,
     AdminComponent,
     SelectorUsuarioComponent,
+    PerfilUserComponent,
+    BusquedaUsuariosComponent,
+    ListaAmigosComponent,
+    ListaSeguidoresComponent,
+    FeedPersonalComponent,
 
   ],
   imports: [

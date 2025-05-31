@@ -1,39 +1,38 @@
-<header class="custom-navbar">
+<mat-toolbar color="primary" class="custom-navbar mat-elevation-z4">
+
+  <!-- Logo -->
   <div class="custom-navbar__logo">
     <mat-icon>menu_book</mat-icon>
   </div>
+
+  <!-- Menú -->
+  <span class="spacer"></span>
+
   <nav class="custom-navbar__nav">
-    <ul class="custom-navbar__menu">
-      <li class="custom-navbar__item">
-        <a routerLink="/inicio" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="custom-navbar__link">
-          <mat-icon>home</mat-icon>
-          <span>Inicio</span>
-        </a>
-      </li>
-      <li class="custom-navbar__item">
-        <a routerLink="/buscar-libros" routerLinkActive="active" class="custom-navbar__link">
-          <mat-icon>search</mat-icon>
-          <span>Buscar</span>
-        </a>
-      </li>
-      <li class="custom-navbar__item">
-        <a routerLink="/mis-libros" routerLinkActive="active" class="custom-navbar__link">
-          <mat-icon>library_books</mat-icon>
-          <span>Mis libros</span>
-        </a>
-      </li>
-      <li class="custom-navbar__item">
-        <a routerLink="/noticias" routerLinkActive="active" class="custom-navbar__link">
-          <mat-icon>rss_feed</mat-icon>
-          <span>Noticias</span>
-        </a>
-      </li>
-      <li class="custom-navbar__item" *ngIf="esAdmin">
-        <a routerLink="/admin" routerLinkActive="active" class="custom-navbar__link">
-          <mat-icon>settings</mat-icon>
-          <span>Admin</span>
-        </a>
-      </li>      
-    </ul>
+    <button mat-button routerLink="/inicio" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="custom-navbar__link">
+      <mat-icon>home</mat-icon>
+      <span>Inicio</span>
+    </button>
+    <button mat-button routerLink="/buscar-libros" routerLinkActive="active" class="custom-navbar__link">
+      <mat-icon>search</mat-icon>
+      <span>Buscar</span>
+    </button>
+    <button mat-button routerLink="/mis-libros" routerLinkActive="active" class="custom-navbar__link">
+      <mat-icon>library_books</mat-icon>
+      <span>Mis libros</span>
+    </button>
+    <button mat-button routerLink="/noticias" routerLinkActive="active" class="custom-navbar__link">
+      <mat-icon>rss_feed</mat-icon>
+      <span>Noticias</span>
+    </button>
+    <button *ngIf="esAdmin" mat-button routerLink="/admin" routerLinkActive="active" class="custom-navbar__link">
+      <mat-icon>settings</mat-icon>
+      <span>Admin</span>
+    </button>
+    <button mat-button routerLink="/perfil-user/{{ username }}" routerLinkActive="active" class="custom-navbar__link">
+      <mat-icon>person</mat-icon>
+      <span>Perfil</span>
+    </button>
   </nav>
-</header>
+
+</mat-toolbar>

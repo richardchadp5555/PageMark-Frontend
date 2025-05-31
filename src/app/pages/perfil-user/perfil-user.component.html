@@ -1,0 +1,106 @@
+<div class="p-4">
+  <!-- Cabecera -->
+  <div class="text-center mb-6">
+    <img *ngIf="avatarUrl; else iconoPorDefecto"
+     [src]="avatarUrl"
+     alt="Avatar"
+     style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover;" />
+
+<ng-template #iconoPorDefecto>
+  <mat-icon class="text-amber-700" style="font-size: 40px;">person</mat-icon>
+</ng-template>
+
+    <h2 class="text-3xl font-bold text-brown-800 mt-2">
+      {{ esMiPerfil ? 'Mi Perfil' : 'Perfil de ' + username }}
+    </h2>
+  </div>
+
+  <!-- Solo se muestra si estás viendo tu propio perfil -->
+<div *ngIf="esMiPerfil" class="text-right mt-4 mb-6">
+  <button mat-stroked-button color="warn" (click)="logout()">
+    <mat-icon>logout</mat-icon>
+    Cerrar sesión
+  </button>
+
+  <div class="mt-4">
+    <label for="avatarUpload">Cambiar avatar:</label>
+    <input type="file" id="avatarUpload" (change)="subirImagen($event)" accept="image/*" />
+  </div>
+  
+</div>
+
+
+  <!-- Buscador -->
+  <div class="mb-6">
+    <app-busqueda-usuarios></app-busqueda-usuarios>
+  </div>
+
+  <!-- Carruseles por estado -->
+  <mat-card class="mat-elevation-z2 mb-6" *ngIf="librosQuieroLeer.length > 0">
+    <h3 class="text-xl font-semibold mb-3 flex items-center gap-2">
+      <mat-icon color="accent">bookmark_border</mat-icon> Quiero leer
+    </h3>
+    <div class="scroll-container">
+      <mat-card class="libro-card"
+        *ngFor="let libro of librosQuieroLeer"
+        [routerLink]="['/detalles-libro', libro.googleBookId]">
+        <img mat-card-image [src]="libro.imagen || 'assets/portada-no-encontrada.png'" alt="Portada" />
+        <mat-card-content>
+          <h4>{{ libro.titulo }}</h4>
+          <p>{{ libro.autor || 'Autor desconocido' }}</p>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </mat-card>
+
+  <mat-card class="mat-elevation-z2 mb-6" *ngIf="librosLeyendo.length > 0">
+    <h3 class="text-xl font-semibold mb-3 flex items-center gap-2">
+      <mat-icon color="primary">menu_book</mat-icon> Leyendo
+    </h3>
+    <div class="scroll-container">
+      <mat-card class="libro-card"
+        *ngFor="let libro of librosLeyendo"
+        [routerLink]="['/detalles-libro', libro.googleBookId]">
+        <img mat-card-image [src]="libro.imagen || 'assets/portada-no-encontrada.png'" alt="Portada" />
+        <mat-card-content>
+          <h4>{{ libro.titulo }}</h4>
+          <p>{{ libro.autor || 'Autor desconocido' }}</p>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </mat-card>
+
+  <mat-card class="mat-elevation-z2 mb-6" *ngIf="librosLeido.length > 0">
+    <h3 class="text-xl font-semibold mb-3 flex items-center gap-2">
+      <mat-icon color="warn">check_box</mat-icon> Leído
+    </h3>
+    <div class="scroll-container">
+      <mat-card class="libro-card"
+        *ngFor="let libro of librosLeido"
+        [routerLink]="['/detalles-libro', libro.googleBookId]">
+        <img mat-card-image [src]="libro.imagen || 'assets/portada-no-encontrada.png'" alt="Portada" />
+        <mat-card-content>
+          <h4>{{ libro.titulo }}</h4>
+          <p>{{ libro.autor || 'Autor desconocido' }}</p>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </mat-card>
+
+  <!-- Relaciones -->
+  <div class="grid mt-8">
+    <div class="col-12 md:col-6">
+      <app-lista-amigos></app-lista-amigos>
+    </div>
+    <div class="col-12 md:col-6">
+      <app-lista-seguidores></app-lista-seguidores>
+    </div>
+  </div>
+
+  <!-- Feed -->
+  <app-feed-personal
+    *ngIf="username"
+    [username]="username"
+    [esMiPerfil]="esMiPerfil"
+  ></app-feed-personal>
+</div>

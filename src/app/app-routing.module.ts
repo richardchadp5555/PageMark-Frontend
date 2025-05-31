@@ -11,6 +11,7 @@ import { DetallesLibroComponent } from './pages/detalles-libro/detalles-libro.co
 import { NoticiasComponent } from './pages/noticias/noticias.component';
 import { AdminComponent } from './pages/admin/admin.component';
 import { AdminGuard } from './guards/admin.guard';
+import { PerfilUserComponent } from './pages/perfil-user/perfil-user.component';
 
 const routes: Routes = [
   // 👉 Ruta raíz redirige al login
@@ -37,6 +38,7 @@ const routes: Routes = [
       { path: 'mis-libros', component: MisLibrosComponent },
       { path: 'detalles-libro/:id', component: DetallesLibroComponent },
       { path: 'noticias', component: NoticiasComponent },
+      { path: 'perfil-user/:username', component: PerfilUserComponent },
       { path: 'admin', component: AdminComponent, canActivate: [AdminGuard] }
     ]
   },
