@@ -5,6 +5,18 @@
   </div>
 
   <div class="header-right">
-    <app-avatar></app-avatar>
+    <app-avatar
+    [username]="username"
+    style="
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      display: block;
+      "
+    ></app-avatar>
+
+
+
   </div>
 </mat-toolbar>

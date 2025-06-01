@@ -1,17 +1,31 @@
-<!-- Proyecto: PageMark -->
-<!-- Archivo: avatar.component.html -->
-<!-- Descripción: Botón avatar que lleva al perfil y muestra imagen o icono -->
-<!-- Autor: Richard Chadwick Plaza - 2º DAM -->
+<div style="width: 100%; height: 100%;">
+  <ng-container *ngIf="avatarUrl; else defaultIcon">
+    <img
+      [src]="avatarUrl"
+      [alt]="username"
+      style="
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+        display: block;
+      "
+    />
+  </ng-container>
 
-<button mat-button class="avatar-button" (click)="irAlPerfil()">
-  <span class="username">{{ username }}</span>
-  <img
-    *ngIf="avatarUrl; else defaultIcon"
-    [src]="avatarUrl"
-    class="avatar-img"
-    alt="Avatar"
-  />
   <ng-template #defaultIcon>
-    <mat-icon class="avatar-icon">account_circle</mat-icon>
+    <div
+      style="
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+        background: #ccc;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      "
+    >
+      <mat-icon>person</mat-icon>
+    </div>
   </ng-template>
-</button>
+</div>

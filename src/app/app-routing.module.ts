@@ -6,7 +6,6 @@ import { Error404PageComponent } from './shared/error404-page/error404-page.comp
 
 import { InicioComponent } from './pages/inicio/inicio.component';
 import { BuscarLibrosComponent } from './pages/buscar-libros/buscar-libros/buscar-libros.component';
-import { MisLibrosComponent } from './pages/mis-libros/mis-libros.component';
 import { DetallesLibroComponent } from './pages/detalles-libro/detalles-libro.component';
 import { NoticiasComponent } from './pages/noticias/noticias.component';
 import { AdminComponent } from './pages/admin/admin.component';
@@ -35,10 +34,9 @@ const routes: Routes = [
     children: [
       { path: 'inicio', component: InicioComponent },
       { path: 'buscar-libros', component: BuscarLibrosComponent },
-      { path: 'mis-libros', component: MisLibrosComponent },
       { path: 'detalles-libro/:id', component: DetallesLibroComponent },
       { path: 'noticias', component: NoticiasComponent },
-      { path: 'perfil-user/:username', component: PerfilUserComponent },
+      { path: 'perfil-user/:username', component: PerfilUserComponent,  runGuardsAndResolvers: 'always' },
       { path: 'admin', component: AdminComponent, canActivate: [AdminGuard] }
     ]
   },
@@ -51,7 +49,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, { onSameUrlNavigation: 'reload' })],
   exports: [RouterModule]
 })
 export class AppRoutingModule {}

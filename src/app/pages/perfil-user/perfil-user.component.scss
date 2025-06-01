@@ -6,21 +6,21 @@
     padding-bottom: 1rem;
     scroll-snap-type: x mandatory;
     scrollbar-width: thin;
-  
+
     &::-webkit-scrollbar {
       height: 8px;
     }
-  
+
     &::-webkit-scrollbar-track {
       background: #f0f0f0;
     }
-  
+
     &::-webkit-scrollbar-thumb {
       background: #ccc;
       border-radius: 4px;
     }
   }
-  
+
   .libro-card {
     min-width: 160px;
     max-width: 160px;
@@ -28,32 +28,34 @@
     transition: transform 0.3s ease;
     border-radius: 8px;
     overflow: hidden;
-  
+
     &:hover {
       transform: scale(1.03);
       box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
     }
-  
+
     img {
       height: 240px;
       width: 100%;
       object-fit: cover;
     }
-  
+
     mat-card-content {
       padding: 0.5rem;
     }
-  
+
     h4 {
       font-size: 0.95rem;
       font-weight: 600;
       margin: 0.2rem 0;
     }
-  
+
     p {
       font-size: 0.8rem;
       color: #666;
       margin: 0;
     }
   }
-  
+
+
+

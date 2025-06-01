@@ -1,0 +1,23 @@
+.feed-container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 1rem;
+}
+
+.actividad-card {
+  border-radius: 1rem;
+  background: #fff;
+}
+
+.portada-libro {
+  width: 80px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.mensaje-actividad {
+  font-size: 0.95rem;
+  line-height: 1.4;
+}

@@ -13,19 +13,30 @@
       placeholder="Introduce el nombre de usuario"
     />
   </mat-form-field>
-  
+
   <!-- Resultados -->
-  <div *ngIf="usuarios.length > 0" class="mt-4">
-    <div *ngFor="let user of usuarios" class="p-2 border-bottom border-gray-300 flex justify-between items-center">
-      <div>
-        <strong>{{ user.username }}</strong>
-      </div>
-      <button mat-stroked-button color="primary" (click)="verPerfil(user.username)">
-        Ver perfil de {{ user.username }}
-      </button>      
+<div *ngIf="usuarios.length > 0" class="mt-4">
+  <div
+    *ngFor="let user of usuarios"
+    class="flex justify-between align-items-center p-3 border-round shadow-1 mb-2"
+    style="background-color: rgba(255, 255, 255, 0.05); border: 1px solid #ccc;"
+  >
+    <span class="text-white font-medium text-lg mr-4">
+      {{ user.username }}
+    </span>
+    <button
+      mat-flat-button
+      color="accent"
+      class="px-4 py-2 border-round"
+      (click)="verPerfil(user.username)"
+    >
+      Ver perfil
+    </button>
   </div>
-  
-  <div *ngIf="usuarios.length === 0 && buscado" class="text-gray-500 mt-3">
-    No se encontraron usuarios con ese nombre.
-  </div>
-  
+</div>
+
+
+<!-- Sin resultados -->
+<div *ngIf="usuarios.length === 0 && buscado" class="text-gray-500 mt-3">
+  No se encontraron usuarios con ese nombre.
+</div>

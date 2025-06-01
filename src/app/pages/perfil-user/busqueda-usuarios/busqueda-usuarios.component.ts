@@ -39,12 +39,12 @@ export class BusquedaUsuariosComponent {
     });
   }
 
-  // Este método permite ver el perfil de otro usuario
   verPerfil(username: string): void {
-    console.log('Navegando a perfil de:', username);
+  this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
     this.router.navigate(['/perfil-user', username]);
-    this.router.navigate(['/perfil-user', username]);
-  }
-  
-  
+  });
+}
+
+
+
 }

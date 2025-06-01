@@ -1,0 +1,53 @@
+<mat-card class="actividad-card mat-elevation-z3 p-5">
+  <div class="flex flex-column md:flex-row align-items-center justify-content-between gap-6">
+
+    <!-- Izquierda: Avatar + info -->
+    <div class="flex align-items-start gap-4 flex-1 w-full">
+      <app-avatar
+        [username]="actividad.username"
+        style="
+          width: 96px;
+          height: 96px;
+          border-radius: 50%;
+          border: 3px solid #999;
+          object-fit: cover;
+          display: block;
+        "
+      ></app-avatar>
+
+      <div class="flex flex-column">
+        <div class="flex gap-3 align-items-center mb-2">
+          <strong class="text-lg">{{ actividad.username }}</strong>
+          <span class="text-sm text-gray-500">{{ actividad.fecha | date:'short' }}</span>
+        </div>
+        <div class="mensaje-actividad text-base text-gray-800 italic">
+          {{ actividad.mensaje }}
+
+            <!-- Mostrar título y autor si están disponibles -->
+            <div *ngIf="actividad.titulo || actividad.autor" class="text-sm mt-1 text-gray-700 font-normal">
+              <span *ngIf="actividad.titulo" class="font-semibold">“{{ actividad.titulo }}”</span>
+              <span *ngIf="actividad.autor"> — {{ actividad.autor }}</span>
+            </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Derecha: portada + botón -->
+    <div class="flex flex-column align-items-center gap-2 w-auto">
+      <img
+        *ngIf="actividad.imagen"
+        [src]="actividad.imagen"
+        alt="Portada libro"
+        class="portada-libro"
+      />
+      <a
+        mat-stroked-button
+        color="primary"
+        *ngIf="actividad.googleBookId"
+        [routerLink]="['/detalles-libro', actividad.googleBookId]"
+      >
+        Ver
+      </a>
+    </div>
+  </div>
+</mat-card>

@@ -1,44 +1,101 @@
 <div class="p-4">
-  <!-- Cabecera -->
-  <div class="text-center mb-6">
-    <img *ngIf="avatarUrl; else iconoPorDefecto"
-     [src]="avatarUrl"
-     alt="Avatar"
-     style="width: 60px; height: 60px; border-radius: 50%; object-fit: cover;" />
 
-<ng-template #iconoPorDefecto>
-  <mat-icon class="text-amber-700" style="font-size: 40px;">person</mat-icon>
-</ng-template>
+  <div class="p-4">
 
-    <h2 class="text-3xl font-bold text-brown-800 mt-2">
-      {{ esMiPerfil ? 'Mi Perfil' : 'Perfil de ' + username }}
-    </h2>
-  </div>
+  <!-- Encabezado del perfil con separador visual -->
+<mat-card class="mb-6 p-4 mat-elevation-z3" style="background: linear-gradient(to right, #7b5858, #1c0434, #511302)">
 
-  <!-- Solo se muestra si estás viendo tu propio perfil -->
-<div *ngIf="esMiPerfil" class="text-right mt-4 mb-6">
-  <button mat-stroked-button color="warn" (click)="logout()">
-    <mat-icon>logout</mat-icon>
-    Cerrar sesión
-  </button>
+  <!-- Cabecera del perfil con avatar -->
+<div class="flex align-items-center justify-content-left gap-4 p-4 text-white" style="min-height: 176px;">
+  <!-- Avatar  -->
+   <ng-container *ngIf="avatarVisible">
+      <app-avatar
+        [username]="username"
+        style="
+          width: 400px;
+          height: 400px;
+          border-radius: 50%;
+          border: 4px solid black;
+          object-fit: cover;
+          display: block;"
+      ></app-avatar>
+    </ng-container>
 
-  <div class="mt-4">
-    <label for="avatarUpload">Cambiar avatar:</label>
-    <input type="file" id="avatarUpload" (change)="subirImagen($event)" accept="image/*" />
-  </div>
-  
+
+  <!-- Username perfectamente alineado -->
+  <h1 class="text-4xl font-serif font-bold m-5 p-8">
+    {{ username }}
+  </h1>
 </div>
 
 
-  <!-- Buscador -->
-  <div class="mb-6">
-    <app-busqueda-usuarios></app-busqueda-usuarios>
+
+<!-- Controles para el usuario autenticado -->
+<div *ngIf="esMiPerfil" class="flex flex-col sm:flex-row gap-4 justify-center items-center mt-6 mb-4">
+  <button
+    mat-raised-button
+    color="warn"
+    class="px-5 py-2 text-md text-white hover:bg-red-700 transition"
+    (click)="logout()"
+  >
+    <mat-icon class="mr-2">logout</mat-icon>
+    Cerrar sesión
+  </button>
+
+
+  <!-- Input oculto para subir el avatar -->
+  <input
+    type="file"
+    #inputAvatar
+    hidden
+    (change)="subirImagen($event)"
+    accept="image/*"
+  />
+
+  <!-- Botón con Angular Material y PrimeFlex -->
+  <!-- Botón con estilo personalizado sin conflictos -->
+  <button
+    mat-raised-button
+    class="bg-white text-black px-5 py-2 border border-gray-300 shadow hover:bg-gray-200 transition"
+    (click)="abrirSelectorImagen(inputAvatar)">
+    <mat-icon class="mr-2">upload</mat-icon>
+    Cambiar avatar
+  </button>
+
+
+
+</div>
+
+
+  <!-- Buscador de usuarios (solo si esMiPerfil) -->
+  <div *ngIf="esMiPerfil" class="flex justify-center mt-2">
+    <div class="w-full max-w-md">
+      <app-busqueda-usuarios></app-busqueda-usuarios>
+    </div>
   </div>
 
-  <!-- Carruseles por estado -->
-  <mat-card class="mat-elevation-z2 mb-6" *ngIf="librosQuieroLeer.length > 0">
-    <h3 class="text-xl font-semibold mb-3 flex items-center gap-2">
-      <mat-icon color="accent">bookmark_border</mat-icon> Quiero leer
+</mat-card>
+
+  <!-- MENSAJE MOTIVACIONAL -->
+<mat-card class="mb-6 p-6 mat-elevation-z3 text-center"
+          style="background: linear-gradient(to right, #FDEBD0, #FAD7A0); border-radius: 1rem;">
+  <div *ngIf="librosLeido.length > 0">
+    <h3 class="text-2xl font-bold text-brown-800 mb-2">
+      🎉 ¡Felicidades, {{username}}!
+    </h3>
+    <p class="text-lg text-brown-700 font-medium italic">
+      {{ mensajeMotivacional }}
+    </p>
+  </div>
+</mat-card>
+
+
+  <!-- Carruseles por estado (sin modificar) -->
+  <mat-card class="mb-6 p-4 mat-elevation-z3" style="background: linear-gradient(to right, #f4f4f4, #9e7b71)" *ngIf="librosQuieroLeer.length > 0">
+    <h3 class="text-xl mb-3 flex items-center gap-2">
+      <mat-icon color="primary">auto_stories</mat-icon>
+      Quiero leer
+      <mat-chip color="primary" selected>{{ librosQuieroLeer.length }} libro(s)</mat-chip>
     </h3>
     <div class="scroll-container">
       <mat-card class="libro-card"
@@ -53,9 +110,11 @@
     </div>
   </mat-card>
 
-  <mat-card class="mat-elevation-z2 mb-6" *ngIf="librosLeyendo.length > 0">
-    <h3 class="text-xl font-semibold mb-3 flex items-center gap-2">
-      <mat-icon color="primary">menu_book</mat-icon> Leyendo
+  <mat-card class="mb-6 p-4 mat-elevation-z3" style="background: linear-gradient(to right, #f4f4f4, #9e7b71)"  *ngIf="librosLeyendo.length > 0">
+    <h3 class="text-xl mb-3 flex items-center gap-2">
+      <mat-icon class="text-blue-600">menu_book</mat-icon>
+      Leyendo
+      <mat-chip color="accent" selected>{{ librosLeyendo.length }} libro(s)</mat-chip>
     </h3>
     <div class="scroll-container">
       <mat-card class="libro-card"
@@ -70,9 +129,11 @@
     </div>
   </mat-card>
 
-  <mat-card class="mat-elevation-z2 mb-6" *ngIf="librosLeido.length > 0">
-    <h3 class="text-xl font-semibold mb-3 flex items-center gap-2">
-      <mat-icon color="warn">check_box</mat-icon> Leído
+  <mat-card class="mb-6 p-4 mat-elevation-z3" style="background: linear-gradient(to right, #f4f4f4, #9e7b71)"  *ngIf="librosLeido.length > 0">
+    <h3 class="text-xl mb-3 flex items-center gap-2">
+      <mat-icon class="text-red-600">check_box</mat-icon>
+      Leído
+      <mat-chip color="warn" selected>{{ librosLeido.length }} libro(s)</mat-chip>
     </h3>
     <div class="scroll-container">
       <mat-card class="libro-card"
@@ -97,7 +158,7 @@
     </div>
   </div>
 
-  <!-- Feed -->
+  <!-- Feed de actividad del usuario -->
   <app-feed-personal
     *ngIf="username"
     [username]="username"

@@ -1,55 +1,32 @@
 <!-- Proyecto: PageMark -->
 <!-- Archivo: feed-actividad.component.html -->
-<!-- Descripción: Muestra un feed visual tipo red social con las últimas actividades -->
+<!-- Descripción: Feed global de actividad tipo red social con componente reutilizable -->
 <!-- Autor: Richard Chadwick Plaza - 2º DAM -->
 
-<div class="flex justify-content-center mt-5 px-2">
-  <mat-card class="w-full sm:w-10 md:w-8 lg:w-6 xl:w-5 shadow-4 p-4 border-round-xl bg-white">
-    <h2 class="text-2xl font-bold mb-4 text-center">Actividad reciente</h2>
+<div class="flex justify-content-center mt-6 px-3">
+  <mat-card class="w-full sm:w-11 md:w-10 lg:w-9 xl:w-8 shadow-6 p-5 border-round-xl bg-white">
 
+    <h2 class="text-3xl font-bold mb-5 text-center">
+      Actividad reciente
+    </h2>
+
+    <!-- Estado de carga / error / vacío -->
     <div *ngIf="isLoading" class="text-center text-gray-500">Cargando actividad...</div>
     <div *ngIf="error" class="text-center text-red-500">{{ error }}</div>
-
     <div *ngIf="!isLoading && actividades.length === 0" class="text-center text-gray-400">
       Aún no hay actividad registrada.
     </div>
 
-    <div class="flex flex-column gap-3 mt-3">
-      <mat-card
+    <!-- Tarjetas de actividad -->
+    <div class="flex flex-column gap-5 mt-4">
+      <app-actividad-card
         *ngFor="let actividad of actividades"
-        class="p-3 border-round shadow-1"
-      >
-        <div class="flex align-items-center justify-content-between mb-2">
-          <div class="flex align-items-center gap-2">
-            <mat-icon color="primary">person</mat-icon>
-            <span class="font-medium text-md">{{ actividad.username }}</span>
-          </div>
-          <span class="text-sm text-gray-600">{{ actividad.fecha | date:'short' }}</span>
-        </div>
-
-        <div class="flex gap-3 align-items-start">
-          <img *ngIf="actividad.imagen" [src]="actividad.imagen"
-               alt="Portada" class="border-round shadow-1"
-               style="width: 80px; height: 120px; object-fit: cover;" />
-
-          <div class="flex flex-column gap-2">
-            <div class="text-sm text-gray-800">
-              {{ actividad.mensaje }}
-            </div>
-
-            <!-- Ver libro -->
-            <div *ngIf="actividad.googleBookId">
-              <a [routerLink]="['/detalles-libro', actividad.googleBookId]" mat-stroked-button color="accent">
-                Ver
-              </a>
-            </div>
-          </div>
-        </div>
-      </mat-card>
+        [actividad]="actividad"
+      ></app-actividad-card>
     </div>
 
-    <!-- Botón para cargar más -->
-    <div class="text-center mt-4">
+    <!-- Botón de paginación -->
+    <div class="text-center mt-5">
       <button mat-raised-button color="primary"
               *ngIf="!noHayMas && !cargandoMas"
               (click)="cargarPagina()">
@@ -58,5 +35,6 @@
       <p *ngIf="noHayMas && !isLoading" class="text-sm text-gray-400 mt-2">No hay más actividad por mostrar.</p>
       <p *ngIf="cargandoMas" class="text-sm text-gray-500 mt-2">Cargando más...</p>
     </div>
+
   </mat-card>
 </div>

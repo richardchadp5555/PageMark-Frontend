@@ -4,7 +4,7 @@
 // Autor: Richard Chadwick Plaza - 2º DAM
 
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { ResultadoBusqueda } from '../interfaces/libro-google.interface';
 import { Observable } from 'rxjs';
@@ -17,175 +17,73 @@ export class LibrosService {
 
   constructor(private http: HttpClient) {}
 
-// Busca libros mediante Google Books API a través del backend.
-// Parámetro: query (texto de búsqueda).
-// Retorna: observable con los resultados tipados como ResultadoBusqueda.
-buscarLibros(query: string, maxResults: number = 40, startIndex: number = 0): Observable<ResultadoBusqueda> {
-  const usuario = localStorage.getItem('usuario');
-
-  if (!usuario) {
-    throw new Error('No hay usuario autenticado');
+  // 🔐 Obtiene las credenciales del usuario autenticado desde localStorage
+  private get usuario(): { username: string, password: string } {
+    const usuario = localStorage.getItem('usuario');
+    if (!usuario) throw new Error('No hay usuario autenticado');
+    return JSON.parse(usuario);
   }
 
-  const { username, password } = JSON.parse(usuario);
-  const basicToken = btoa(`${username}:${password}`);
-  const headers = {
-    Authorization: `Basic ${basicToken}`
-  };
+  // 🛡️ Genera las cabeceras con Basic Auth a partir del usuario actual
+  private get headers(): HttpHeaders {
+    const { username, password } = this.usuario;
+    return new HttpHeaders({
+      Authorization: `Basic ${btoa(`${username}:${password}`)}`
+    });
+  }
 
-  const url = `${this.apiUrl}/buscar?q=${encodeURIComponent(query)}&maxResults=${maxResults}&startIndex=${startIndex}`;
+  // 📚 Busca libros en Google Books API a través del backend con paginación
+  buscarLibros(query: string, maxResults: number = 40, startIndex: number = 0): Observable<ResultadoBusqueda> {
+    const url = `${this.apiUrl}/buscar?q=${encodeURIComponent(query)}&maxResults=${maxResults}&startIndex=${startIndex}`;
+    return this.http.get<ResultadoBusqueda>(url, { headers: this.headers });
+  }
 
-  return this.http.get<ResultadoBusqueda>(url, { headers });
-}
-
-
+  // 🔥 Obtiene los libros populares (almacenados en MongoDB)
   obtenerLibrosPopulares(): Observable<any> {
-    const usuario = localStorage.getItem('usuario');
-
-    if (!usuario) {
-      throw new Error('No hay usuario autenticado');
-    }
-
-    const { username, password } = JSON.parse(usuario);
-    const basicToken = btoa(`${username}:${password}`);
-    const headers = {
-      Authorization: `Basic ${basicToken}`
-    };
-
-    return this.http.get(`${this.apiUrl}/populares`, {
-      headers
-    });
+    return this.http.get(`${this.apiUrl}/populares`, { headers: this.headers });
   }
 
-  // Este método obtiene un libro almacenado en mongo
+  // 📖 Obtiene un libro por su ID de Mongo
   obtenerLibroPorId(id: string): Observable<any> {
-  const usuario = localStorage.getItem('usuario');
-
-  if (!usuario) {
-    throw new Error('No hay usuario autenticado');
+    return this.http.get(`${this.apiUrl}/${id}`, { headers: this.headers });
   }
 
-  const { username, password } = JSON.parse(usuario);
-  const basicToken = btoa(`${username}:${password}`);
-  const headers = {
-    Authorization: `Basic ${basicToken}`
-  };
-
-  return this.http.get(`${this.apiUrl}/${id}`, {
-    headers
-  });
-}
-
-  // Este método extrae información adicional de google books api
+  // 🔍 Obtiene los detalles del libro desde Google Books API por su GoogleBookId
   obtenerDetallesDesdeGoogle(id: string): Observable<any> {
-    const usuario = localStorage.getItem('usuario');
-
-    if (!usuario) {
-      throw new Error('No hay usuario autenticado');
-    }
-
-    const { username, password } = JSON.parse(usuario);
-    const basicToken = btoa(`${username}:${password}`);
-    const headers = {
-      Authorization: `Basic ${basicToken}`
-    };
-
-    return this.http.get(`${this.apiUrl}/google/${id}`, {
-      headers
-    });
+    return this.http.get(`${this.apiUrl}/google/${id}`, { headers: this.headers });
   }
 
-  // Guarda un libro para el usuario en MongoDB
+  // 💾 Guarda un libro para el usuario actual
   guardarLibro(libro: any): Observable<any> {
-    const usuario = localStorage.getItem('usuario');
-
-    if (!usuario) {
-      throw new Error('No hay usuario autenticado');
-    }
-
-    const { username, password } = JSON.parse(usuario);
-    const basicToken = btoa(`${username}:${password}`);
-    const headers = {
-      Authorization: `Basic ${basicToken}`
-    };
-
-    return this.http.post(`${this.apiUrl}`, libro, { headers });
+    return this.http.post(`${this.apiUrl}`, libro, { headers: this.headers });
   }
 
-  // Obtiene el libro guardado por el usuario actual (si existe)
+  // 🧠 Devuelve el libro guardado por un usuario concreto y su GoogleBookId
   obtenerLibroGuardado(username: string, googleBookId: string): Observable<any> {
-    const usuario = localStorage.getItem('usuario');
 
-    if (!usuario) {
-      throw new Error('No hay usuario autenticado');
-    }
-
-    const { username: u, password } = JSON.parse(usuario);
-    const basicToken = btoa(`${u}:${password}`);
-    const headers = {
-      Authorization: `Basic ${basicToken}`
-    };
-
-    return this.http.get(`${this.apiUrl}/usuario/${username}/google/${googleBookId}`, { headers });
+    return this.http.get(`${this.apiUrl}/usuario/${username}/google/${googleBookId}`, { headers: this.headers });
   }
 
-  // Obtiene todos los libros del usuario con un estado concreto
+  // 📂 Obtiene todos los libros de un usuario en un estado dado (QUIERO_LEER, LEYENDO, LEIDO)
   obtenerLibrosPorEstado(username: string, estado: string): Observable<any> {
-    const usuario = localStorage.getItem('usuario');
-
-    if (!usuario) {
-      throw new Error('No hay usuario autenticado');
-    }
-
-    const { username: u, password } = JSON.parse(usuario);
-    const basicToken = btoa(`${u}:${password}`);
-    const headers = {
-      Authorization: `Basic ${basicToken}`
-    };
-
-    return this.http.get(`${this.apiUrl}/usuario/${username}/estado/${estado}`, { headers });
+    return this.http.get(`${this.apiUrl}/usuario/${username}/estado/${estado}`, { headers: this.headers });
   }
 
-  // elimina el libro del usuario actual
-  eliminarLibro(id: string): Observable<any> {
-  const usuario = localStorage.getItem('usuario');
-  if (!usuario) throw new Error('No hay usuario autenticado');
-
-  const { username, password } = JSON.parse(usuario);
-  const headers = {
-    Authorization: `Basic ${btoa(`${username}:${password}`)}`
-  };
-
-  return this.http.delete(`${this.apiUrl}/${id}`, { headers });
-}
-
-// Cambia el estado de un libro guardado (ej. de QUIERO_LEER a LEIDO)
-actualizarEstadoLibro(id: string, nuevoEstado: string): Observable<any> {
-  const usuario = localStorage.getItem('usuario');
-  if (!usuario) throw new Error('No hay usuario autenticado');
-
-  const { username, password } = JSON.parse(usuario);
-  const headers = {
-    Authorization: `Basic ${btoa(`${username}:${password}`)}`,
-    'Content-Type': 'application/json'
-  };
-
-  return this.http.patch(`${this.apiUrl}/${id}`, { estado: nuevoEstado }, { headers });
-}
-
-// Actualiza la página de lectura del libro
-actualizarPagina(id: string, nuevaPagina: number): Observable<any> {
-  const usuario = localStorage.getItem('usuario');
-  if (!usuario) throw new Error('No hay usuario autenticado');
-
-  const { username, password } = JSON.parse(usuario);
-  const headers = {
-    Authorization: `Basic ${btoa(`${username}:${password}`)}`,
-    'Content-Type': 'application/json'
-  };
-
-  return this.http.patch(`${this.apiUrl}/${id}`, { pagina: nuevaPagina }, { headers });
-}
+    // 🗑️ Elimina un libro guardado usando su ID interno de Mongo
+  eliminarLibroPorId(id: string): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${id}`, { headers: this.headers });
+  }
 
 
+  // 🔄 Cambia el estado de un libro guardado (ej: QUIERO_LEER → LEIDO)
+  actualizarEstadoLibro(id: string, nuevoEstado: string): Observable<any> {
+    const headers = this.headers.set('Content-Type', 'application/json');
+    return this.http.patch(`${this.apiUrl}/${id}`, { estado: nuevoEstado }, { headers });
+  }
+
+  // 📈 Actualiza el número de página leída en un libro guardado
+  actualizarPagina(id: string, nuevaPagina: number): Observable<any> {
+    const headers = this.headers.set('Content-Type', 'application/json');
+    return this.http.patch(`${this.apiUrl}/${id}`, { pagina: nuevaPagina }, { headers });
+  }
 }

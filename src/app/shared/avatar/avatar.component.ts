@@ -1,47 +1,69 @@
 // Proyecto: PageMark
 // Archivo: avatar.component.ts
-// Descripción: Muestra el avatar del usuario (si lo tiene) y redirige a su perfil
+// Descripción: Componente que obtiene y muestra la imagen del avatar del usuario.
 // Autor: Richard Chadwick Plaza - 2º DAM
 
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { AuthService } from '../../auth/services/auth.service';
-import { UsuariosService } from '../../services/usuarios.service';
+import { Component, Input, OnChanges, SimpleChanges, OnDestroy } from '@angular/core';
+import { UsuariosService } from 'src/app/services/usuarios.service';
 
 @Component({
   selector: 'app-avatar',
-  templateUrl: './avatar.component.html',
-  styleUrls: ['./avatar.component.scss']
+  templateUrl: './avatar.component.html'
 })
-export class AvatarComponent implements OnInit {
-  username: string = '';
+export class AvatarComponent implements OnChanges, OnDestroy {
+
+  // Nombre del usuario del cual se mostrará el avatar (recibido por @Input)
+  @Input() username: string = '';
+
+  // URL temporal de la imagen del avatar generada a partir de un blob
   avatarUrl: string = '';
 
-  constructor(
-    private authService: AuthService,
-    private usuariosService: UsuariosService,
-    private router: Router
-  ) {}
+  // Referencia para revocar la URL anterior cuando se actualice
+  private objectUrl: string | null = null;
 
-  ngOnInit(): void {
-    const usuario = this.authService.getUsuarioActual();
-    if (usuario) {
-      this.username = usuario.username;
+  constructor(private usuariosService: UsuariosService) {}
 
-      // Petición al backend para obtener avatar URL
-      this.usuariosService.obtenerAvatarUrl(this.username).subscribe({
-        next: (resp: { avatarUrl: string }) => {
-          this.avatarUrl = resp.avatarUrl || '';
-        },
-        error: () => {
-          this.avatarUrl = '';
-        }
-      });
-      
+  // Se ejecuta cada vez que cambia algún @Input() (como el username)
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['username'] && this.username) {
+      this.cargarAvatar(this.username);
     }
   }
 
-  irAlPerfil(): void {
-    this.router.navigate(['/perfil-user', this.username]);
+  // Método reutilizable para cargar el avatar desde el backend
+  public cargarAvatar(username: string): void {
+    this.usuariosService.obtenerAvatarUrl(username).subscribe({
+      next: (resp) => {
+        const nombreArchivo = resp.avatarUrl?.split('/').pop();
+
+        if (nombreArchivo) {
+          this.usuariosService.obtenerImagenAvatar(nombreArchivo).subscribe({
+            next: (blob) => {
+              // Revocamos la URL anterior si existía
+              if (this.objectUrl) {
+                URL.revokeObjectURL(this.objectUrl);
+              }
+
+              // Creamos nueva URL temporal
+              this.objectUrl = URL.createObjectURL(blob);
+              this.avatarUrl = this.objectUrl;
+            },
+            error: () => {
+              this.avatarUrl = '';
+            }
+          });
+        }
+      },
+      error: () => {
+        this.avatarUrl = '';
+      }
+    });
+  }
+
+  // Limpieza al destruir el componente
+  ngOnDestroy(): void {
+    if (this.objectUrl) {
+      URL.revokeObjectURL(this.objectUrl);
+    }
   }
 }

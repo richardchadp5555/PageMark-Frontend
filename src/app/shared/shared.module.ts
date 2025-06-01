@@ -15,6 +15,7 @@ import { FooterComponent } from './footer/footer.component';
 import { Error404PageComponent } from './error404-page/error404-page.component';
 import { LayoutComponent } from './layout/layout.component';
 import { AvatarComponent } from './avatar/avatar.component';
+import { ActividadCardComponent } from './actividad-card/actividad-card.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { AvatarComponent } from './avatar/avatar.component';
     FooterComponent,
     Error404PageComponent,
     LayoutComponent,
-    AvatarComponent
+    AvatarComponent,
+    ActividadCardComponent
   ],
   imports: [
     CommonModule,
@@ -36,7 +38,8 @@ import { AvatarComponent } from './avatar/avatar.component';
     FooterComponent,
     Error404PageComponent,
     AvatarComponent,
-    LayoutComponent
+    LayoutComponent,
+    ActividadCardComponent,
   ]
 })
 export class SharedModule { }

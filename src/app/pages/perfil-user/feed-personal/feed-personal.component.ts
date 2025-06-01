@@ -5,6 +5,7 @@
 
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { FeedService } from 'src/app/services/feed.service';
+import { UsuariosService } from 'src/app/services/usuarios.service';
 
 @Component({
   selector: 'app-feed-personal',
@@ -24,7 +25,9 @@ export class FeedPersonalComponent implements OnChanges {
   page = 0;
   size = 5;
 
-  constructor(private feedService: FeedService) {}
+  constructor(private feedService: FeedService,
+     private usuariosService: UsuariosService
+  ) {}
 
   // Detecta cambios en el username recibido por @Input
   ngOnChanges(changes: SimpleChanges): void {
